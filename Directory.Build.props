@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>7.3</LangVersion>
+    <Deterministic>true</Deterministic>
+    <!-- Allows building the net48/WPF projects with the .NET SDK on a non-Windows machine (CI, dev). No effect on Windows. -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+  </PropertyGroup>
+</Project>

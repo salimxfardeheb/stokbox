@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Stokbox.Core\Stokbox.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.1.66" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.119" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Explicit logical name: the migration engine looks scripts up by this exact prefix. -->
+    <EmbeddedResource Include="Migrations\*.sql" LogicalName="Stokbox.Data.Migrations.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>
