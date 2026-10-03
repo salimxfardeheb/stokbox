@@ -5,38 +5,45 @@ namespace Stokbox.App.ViewModels
 {
     public sealed class MainViewModel : ObservableObject
     {
+        private const string SaleKey = "sale";
         private const string ProductsKey = "products";
         private const string StockEntriesKey = "stock-entries";
         private const string LabelsKey = "labels";
         private const string SettingsKey = "settings";
 
+        private readonly SaleViewModel _sale;
         private readonly ProductsViewModel _products;
         private readonly StockEntriesViewModel _stockEntries;
         private readonly LabelsViewModel _labels;
-        private readonly LabelSettingsViewModel _labelSettings;
+        private readonly SettingsViewModel _settings;
         private NavigationItem _selectedMenuItem;
         private object _currentPage;
 
         public MainViewModel(
+            SaleViewModel sale,
             ProductsViewModel products,
             StockEntriesViewModel stockEntries,
             LabelsViewModel labels,
-            LabelSettingsViewModel labelSettings)
+            SettingsViewModel settings)
         {
+            _sale = sale;
             _products = products;
             _stockEntries = stockEntries;
             _labels = labels;
-            _labelSettings = labelSettings;
+            _settings = settings;
             MenuItems = new[]
             {
-                new NavigationItem("sale", "Vente"),
+                new NavigationItem(SaleKey, "Vente"),
                 new NavigationItem(ProductsKey, "Produits"),
                 new NavigationItem(StockEntriesKey, "Entrées de stock"),
                 new NavigationItem(LabelsKey, "Étiquettes"),
                 new NavigationItem("history", "Historique"),
                 new NavigationItem(SettingsKey, "Paramètres")
             };
+
+            // The sale screen is the home screen.
             _selectedMenuItem = MenuItems[0];
+            ShowPageOf(_selectedMenuItem);
         }
 
         public IReadOnlyList<NavigationItem> MenuItems { get; }
@@ -64,7 +71,12 @@ namespace Stokbox.App.ViewModels
 
         private void ShowPageOf(NavigationItem item)
         {
-            if (item != null && item.Key == ProductsKey)
+            if (item != null && item.Key == SaleKey)
+            {
+                _sale.Activate();
+                CurrentPage = _sale;
+            }
+            else if (item != null && item.Key == ProductsKey)
             {
                 _products.Refresh();
                 CurrentPage = _products;
@@ -80,8 +92,8 @@ namespace Stokbox.App.ViewModels
             }
             else if (item != null && item.Key == SettingsKey)
             {
-                _labelSettings.Load();
-                CurrentPage = _labelSettings;
+                _settings.Load();
+                CurrentPage = _settings;
             }
             else
             {

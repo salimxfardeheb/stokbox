@@ -1,0 +1,22 @@
+<!-- Question oui/non au clavier : Entrée = oui, Échap = non. -->
+<Window x:Class="Stokbox.App.Views.AskWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Stokbox"
+        Width="420" SizeToContent="Height"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        FontFamily="Segoe UI" FontSize="14"
+        UseLayoutRounding="True">
+    <StackPanel Margin="24,20,24,22">
+        <TextBlock x:Name="HeadlineText" FontSize="24" FontWeight="Bold" Foreground="#1E6B34" TextWrapping="Wrap" />
+        <TextBlock x:Name="QuestionText" FontSize="16" TextWrapping="Wrap" Margin="0,14,0,0" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,22,0,0">
+            <Button x:Name="YesButton" Content="Oui (Entrée)" IsDefault="True" Click="OnYesClick"
+                    Style="{StaticResource ActionButtonStyle}" FontWeight="SemiBold" Margin="0,0,8,0" />
+            <Button Content="Non (Échap)" IsCancel="True" Style="{StaticResource ActionButtonStyle}" />
+        </StackPanel>
+    </StackPanel>
+</Window>

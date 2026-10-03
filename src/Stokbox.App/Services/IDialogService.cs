@@ -15,5 +15,13 @@ namespace Stokbox.App.Services
         bool Confirm(string message);
 
         void ShowWarning(string message);
+
+        /// <returns>True when the sale was recorded.</returns>
+        bool ShowPayment(PaymentViewModel viewModel);
+
+        /// <summary>
+        /// Yes/no question answered from the keyboard: Enter for yes, Escape for no.
+        /// </summary>
+        bool Ask(string headline, string question);
     }
 }

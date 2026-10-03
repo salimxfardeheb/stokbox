@@ -75,10 +75,16 @@ namespace Stokbox.App
             services.AddSingleton<StockService>();
             services.AddSingleton<ISettingsRepository, SettingsRepository>();
             services.AddSingleton<LabelSettingsService>();
+            services.AddSingleton<ReceiptSettingsService>();
+            services.AddSingleton<ISaleRepository, SaleRepository>();
+            services.AddSingleton<SaleService>(provider => new SaleService(
+                provider.GetRequiredService<IProductRepository>(),
+                provider.GetRequiredService<ISaleRepository>()));
 
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<IPrinterCatalog, WindowsPrinters>();
             services.AddSingleton<ILabelPrintService, LabelPrintService>();
+            services.AddSingleton<IReceiptPrintService, ReceiptPrintService>();
 
             // One search per screen: each keeps its own text and results.
             services.AddTransient<ProductSearchViewModel>();
@@ -86,6 +92,9 @@ namespace Stokbox.App
             services.AddSingleton<StockEntriesViewModel>();
             services.AddSingleton<LabelsViewModel>();
             services.AddSingleton<LabelSettingsViewModel>();
+            services.AddSingleton<ReceiptSettingsViewModel>();
+            services.AddSingleton<SettingsViewModel>();
+            services.AddSingleton<SaleViewModel>();
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<MainWindow>();
 

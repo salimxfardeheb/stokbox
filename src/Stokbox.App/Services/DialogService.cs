@@ -31,6 +31,18 @@ namespace Stokbox.App.Services
                 MessageBoxResult.No) == MessageBoxResult.Yes;
         }
 
+        public bool ShowPayment(PaymentViewModel viewModel)
+        {
+            var window = new PaymentWindow(viewModel) { Owner = Application.Current.MainWindow };
+            return window.ShowDialog() == true;
+        }
+
+        public bool Ask(string headline, string question)
+        {
+            var window = new AskWindow(headline, question) { Owner = Application.Current.MainWindow };
+            return window.ShowDialog() == true;
+        }
+
         public void ShowWarning(string message)
         {
             MessageBox.Show(Application.Current.MainWindow, message, Caption, MessageBoxButton.OK, MessageBoxImage.Warning);

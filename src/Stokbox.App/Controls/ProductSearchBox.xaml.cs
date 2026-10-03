@@ -70,12 +70,20 @@ namespace Stokbox.App.Controls
                     e.Handled = true;
                     break;
                 case Key.Down:
-                    viewModel.MoveSelection(1);
-                    e.Handled = true;
+                    if (viewModel.IsResultListOpen)
+                    {
+                        viewModel.MoveSelection(1);
+                        e.Handled = true;
+                    }
+
                     break;
                 case Key.Up:
-                    viewModel.MoveSelection(-1);
-                    e.Handled = true;
+                    if (viewModel.IsResultListOpen)
+                    {
+                        viewModel.MoveSelection(-1);
+                        e.Handled = true;
+                    }
+
                     break;
                 case Key.Escape:
                     if (viewModel.IsResultListOpen)

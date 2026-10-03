@@ -10,6 +10,9 @@
         FontFamily="Segoe UI" FontSize="14"
         UseLayoutRounding="True">
     <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:SaleViewModel}">
+            <views:SaleView />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:ProductsViewModel}">
             <views:ProductsView />
         </DataTemplate>
@@ -19,8 +22,8 @@
         <DataTemplate DataType="{x:Type viewModels:LabelsViewModel}">
             <views:LabelsView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModels:LabelSettingsViewModel}">
-            <views:LabelSettingsView />
+        <DataTemplate DataType="{x:Type viewModels:SettingsViewModel}">
+            <views:SettingsView />
         </DataTemplate>
 
         <Style x:Key="SideMenuItemStyle" TargetType="ListBoxItem">

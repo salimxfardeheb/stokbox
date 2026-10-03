@@ -1,0 +1,188 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using Stokbox.App.Services;
+using Stokbox.App.ViewModels;
+using Stokbox.App.Views;
+using Stokbox.Core.Entities;
+using Stokbox.Core.Repositories;
+using Stokbox.Core.Services;
+using Xunit;
+
+namespace Stokbox.App.Tests
+{
+    /// <summary>
+    /// Loads the XAML of the sale flow with the application resources, as the running application does:
+    /// a missing style or a broken template only fails at that moment.
+    /// </summary>
+    public class SaleWindowsLoadingTests
+    {
+        [Fact]
+        public void The_sale_screen_and_its_windows_load_with_a_filled_cart()
+        {
+            Sta.Run(() =>
+            {
+                // One Application per process: this is the only test that creates it.
+                var application = new App();
+                application.InitializeComponent();
+
+                var products = new StubProducts();
+                var saleService = new SaleService(products, new StubSales());
+                var productService = new ProductService(products, new StubCategories(), new BarcodeGenerator(new StubSequence()));
+                var screen = new SaleViewModel(saleService, new StubReceipts(), new StubDialogs(), new ProductSearchViewModel(productService));
+                screen.Search.Text = "2000000000015";
+                screen.Search.Submit();
+                screen.Search.Text = "2000000000022";
+                screen.Search.Submit();
+
+                var view = new SaleView { DataContext = screen };
+                Layout(view, 1000, 600);
+
+                // The search field and one quantity box per line of the cart.
+                Assert.Equal(3, Descendants<TextBox>(view).Count());
+                Assert.Contains(Descendants<TextBlock>(view), text => text.Text == "555,50 DA");
+
+                var cart = new Cart();
+                saleService.AddProduct(cart, 1);
+                var payment = new PaymentWindow(new PaymentViewModel(saleService, cart));
+                Layout((FrameworkElement)payment.Content, 440, 400);
+                Assert.Contains(Descendants<TextBox>(payment).Select(box => box.Text), text => text == "520,50");
+                payment.Close();
+
+                var ask = new AskWindow("Monnaie à rendre : 479,50 DA", "Imprimer le ticket ?");
+                Layout((FrameworkElement)ask.Content, 420, 200);
+                Assert.Contains(Descendants<TextBlock>(ask), text => text.Text == "Imprimer le ticket ?");
+                ask.Close();
+
+                var settings = new SettingsView
+                {
+                    DataContext = new SettingsViewModel(
+                        new LabelSettingsViewModel(new LabelSettingsService(new StubSettings()), null, new StubPrinters()),
+                        new ReceiptSettingsViewModel(new ReceiptSettingsService(new StubSettings()), new StubReceipts(), new StubPrinters()))
+                };
+                ((SettingsViewModel)settings.DataContext).Load();
+                Layout(settings, 1000, 600);
+                Assert.Equal(2, Descendants<TabItem>(settings).Count());
+            });
+        }
+
+        private static void Layout(FrameworkElement element, double width, double height)
+        {
+            element.Measure(new Size(width, height));
+            element.Arrange(new Rect(0, 0, width, height));
+            element.UpdateLayout();
+        }
+
+        private static IEnumerable<T> Descendants<T>(DependencyObject root) where T : DependencyObject
+        {
+            if (root is Window window && window.Content is DependencyObject content)
+            {
+                root = content;
+            }
+
+            for (var i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+            {
+                var child = VisualTreeHelper.GetChild(root, i);
+                if (child is T match)
+                {
+                    yield return match;
+                }
+
+                foreach (var descendant in Descendants<T>(child))
+                {
+                    yield return descendant;
+                }
+            }
+        }
+
+        private sealed class StubProducts : IProductRepository
+        {
+            private readonly List<Product> _products = new List<Product>
+            {
+                new Product { Id = 1, Barcode = "2000000000015", Name = "Café moulu", PurchasePriceCents = 40000, SalePriceCents = 52050, StockQuantity = 10 },
+                new Product { Id = 2, Barcode = "2000000000022", Name = "Eau minérale", PurchasePriceCents = 2500, SalePriceCents = 3500, StockQuantity = 10 }
+            };
+
+            public Product GetById(long id) => _products.FirstOrDefault(p => p.Id == id);
+
+            public Product GetByBarcode(string barcode) => _products.FirstOrDefault(p => p.Barcode == barcode);
+
+            public IReadOnlyList<Product> Search(ProductSearchCriteria criteria) => _products;
+
+            public long Insert(string barcode, string name, long categoryId, long purchasePriceCents, long salePriceCents, System.DateTime createdAtUtc) => 0;
+
+            public bool Update(long id, string name, long categoryId, long purchasePriceCents, long salePriceCents) => false;
+
+            public bool SetArchived(long id, bool isArchived) => false;
+        }
+
+        private sealed class StubSales : ISaleRepository
+        {
+            public Sale Create(NewSale sale) => new Sale { Number = "V-20261003-0001", Lines = sale.Lines };
+        }
+
+        private sealed class StubCategories : ICategoryRepository
+        {
+            public IReadOnlyList<Category> GetAll() => new Category[0];
+
+            public Category GetById(long id) => null;
+
+            public long Insert(string name) => 0;
+
+            public bool Rename(long id, string name) => false;
+
+            public int CountProducts(long id) => 0;
+
+            public bool Delete(long id) => false;
+        }
+
+        private sealed class StubSequence : IBarcodeSequence
+        {
+            public long Next() => 1;
+        }
+
+        private sealed class StubSettings : ISettingsRepository
+        {
+            public IReadOnlyDictionary<string, string> GetAll() => new Dictionary<string, string>();
+
+            public void Save(IReadOnlyDictionary<string, string> values)
+            {
+            }
+        }
+
+        private sealed class StubPrinters : IPrinterCatalog
+        {
+            public IReadOnlyList<string> GetPrinterNames() => new[] { "Ticket 80 mm" };
+        }
+
+        private sealed class StubReceipts : IReceiptPrintService
+        {
+            public bool IsEnabled => false;
+
+            public bool Print(Sale sale) => false;
+
+            public bool PrintTest(ReceiptSettings settings) => false;
+        }
+
+        private sealed class StubDialogs : IDialogService
+        {
+            public bool ShowProductForm(ProductFormViewModel viewModel) => false;
+
+            public void ShowCategories(CategoriesViewModel viewModel)
+            {
+            }
+
+            public bool Confirm(string message) => false;
+
+            public void ShowWarning(string message)
+            {
+            }
+
+            public bool ShowPayment(PaymentViewModel viewModel) => false;
+
+            public bool Ask(string headline, string question) => false;
+        }
+    }
+}
