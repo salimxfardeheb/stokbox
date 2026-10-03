@@ -10,13 +10,15 @@ namespace Stokbox.App.ViewModels
             LabelSettingsViewModel labels,
             ReceiptSettingsViewModel receipt,
             SecurityViewModel security,
-            BackupViewModel backup)
+            BackupViewModel backup,
+            AboutViewModel about)
         {
             Shop = shop;
             Labels = labels;
             Receipt = receipt;
             Security = security;
             Backup = backup;
+            About = about;
         }
 
         public ShopSettingsViewModel Shop { get; }
@@ -28,6 +30,8 @@ namespace Stokbox.App.ViewModels
         public SecurityViewModel Security { get; }
 
         public BackupViewModel Backup { get; }
+
+        public AboutViewModel About { get; }
 
         /// <summary>
         /// Fills the forms with the saved settings; called each time the screen is shown.

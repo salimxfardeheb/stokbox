@@ -65,6 +65,25 @@ namespace Stokbox.App.Tests
                 Assert.Contains(Descendants<TextBlock>(historyView), text => text.Text == "Annulée");
                 Assert.Contains(Descendants<TextBlock>(historyView), text => text.Text == "Retours : 520,50 DA remboursés");
 
+                var dashboard = new DashboardViewModel(new StubDashboard(), null, () => new System.DateTime(2026, 10, 3));
+                dashboard.SelectedPeriod = dashboard.Periods[1];
+                dashboard.RefreshAsync().GetAwaiter().GetResult();
+                var dashboardView = new DashboardView { DataContext = dashboard };
+                Layout(dashboardView, 900, 1400);
+                Assert.Contains(Descendants<TextBlock>(dashboardView), text => text.Text == "Produits en rupture");
+                Assert.Contains(Descendants<TextBlock>(dashboardView), text => text.Text == "4 600,00 DA");
+                Assert.Contains(Descendants<TextBlock>(dashboardView), text => text.Text == "23,4 %");
+                Assert.Contains(Descendants<TextBlock>(dashboardView), text => text.Text == "Sans catégorie");
+
+                // One column per day; the bar of the best day takes the whole height of the plot area.
+                var dayColumns = Descendants<Grid>(dashboardView).Where(grid => grid.Name == "DayColumn").ToList();
+                Assert.Equal(7, dayColumns.Count);
+                Assert.Equal("03/10/2026 — 1 631,50 DA", dayColumns[6].ToolTip);
+                var bars = Descendants<System.Windows.Shapes.Rectangle>(dashboardView).Where(bar => bar.Name == "PositiveBar").ToList();
+                Assert.True(bars[6].ActualHeight > 100);
+                Assert.Equal(bars[6].ActualHeight / 2, bars[5].ActualHeight, 0);
+                Assert.Equal(0, bars[0].ActualHeight);
+
                 var returnWindow = new ReturnWindow(new ReturnViewModel(saleService, saleService.GetSale(1)));
                 Layout((FrameworkElement)returnWindow.Content, 760, 420);
                 Assert.Equal(2, Descendants<TextBox>(returnWindow).Count());
@@ -78,13 +97,14 @@ namespace Stokbox.App.Tests
                         new LabelSettingsViewModel(new LabelSettingsService(new StubSettings()), null, new StubPrinters()),
                         new ReceiptSettingsViewModel(new ReceiptSettingsService(new StubSettings()), new StubReceipts(), new StubPrinters()),
                         new SecurityViewModel(auth),
-                        new BackupViewModel(new StubBackups(), null, new StubDialogs(), null))
+                        new BackupViewModel(new StubBackups(), null, new StubDialogs(), null),
+                        new AboutViewModel(new Stokbox.Core.AppPaths("C:/ProgramData/Stokbox")))
                 };
                 ((SettingsViewModel)settings.DataContext).Load();
                 Layout(settings, 1000, 600);
                 var tabs = Descendants<TabControl>(settings).Single();
                 Assert.Equal(
-                    new[] { "Boutique", "Étiquettes", "Ticket", "Sécurité", "Sauvegarde" },
+                    new[] { "Boutique", "Étiquettes", "Ticket", "Sécurité", "Sauvegarde", "À propos" },
                     tabs.Items.Cast<TabItem>().Select(tab => (string)tab.Header));
 
                 // Each tab builds its content when it is shown.
@@ -203,6 +223,34 @@ namespace Stokbox.App.Tests
             }
 
             public SaleReturn Return(long saleId, IReadOnlyList<ReturnRequestLine> lines, System.DateTime returnedAtUtc) => null;
+        }
+
+        private sealed class StubDashboard : IDashboardService
+        {
+            public Stokbox.Core.Dashboard.StockSummary GetStockSummary() =>
+                new Stokbox.Core.Dashboard.StockSummary(460000, 604500, 2, 34, 1);
+
+            public Stokbox.Core.Dashboard.SalesKpis GetSalesKpis(System.DateTime fromLocalDate, System.DateTime toLocalDate) =>
+                new Stokbox.Core.Dashboard.SalesKpis(1, 267250, 163150, 125000, 5);
+
+            public IReadOnlyList<Stokbox.Core.Dashboard.TopProduct> GetTopProducts(System.DateTime fromLocalDate, System.DateTime toLocalDate, int limit = 10) => new[]
+            {
+                new Stokbox.Core.Dashboard.TopProduct("Café moulu", 3, 156150),
+                new Stokbox.Core.Dashboard.TopProduct("Eau minérale", 2, 7000)
+            };
+
+            public IReadOnlyList<Stokbox.Core.Dashboard.CategorySales> GetSalesByCategory(System.DateTime fromLocalDate, System.DateTime toLocalDate) => new[]
+            {
+                new Stokbox.Core.Dashboard.CategorySales("Épicerie", 156150),
+                new Stokbox.Core.Dashboard.CategorySales(null, 7000)
+            };
+
+            public IReadOnlyList<Stokbox.Core.Dashboard.DailySales> GetDailySales(System.DateTime fromLocalDate, System.DateTime toLocalDate) =>
+                Enumerable.Range(0, 7)
+                    .Select(i => new Stokbox.Core.Dashboard.DailySales(
+                        fromLocalDate.AddDays(i),
+                        i == 6 ? 163150 : i == 5 ? 81575 : 0))
+                    .ToList();
         }
 
         private sealed class StubCategories : ICategoryRepository

@@ -43,7 +43,8 @@ namespace Stokbox.Core.Services
             {
                 Text = text.Length == 0 ? null : text,
                 CategoryId = source.CategoryId,
-                IncludeArchived = source.IncludeArchived
+                IncludeArchived = source.IncludeArchived,
+                OutOfStockOnly = source.OutOfStockOnly
             });
         }
 

@@ -140,6 +140,7 @@ namespace Stokbox.App
             services.AddSingleton<SaleService>(provider => new SaleService(
                 provider.GetRequiredService<IProductRepository>(),
                 provider.GetRequiredService<ISaleRepository>()));
+            services.AddSingleton<IDashboardService, SqliteDashboardService>();
 
             services.AddSingleton<IDialogService, DialogService>();
             services.AddSingleton<IFileDialogService, FileDialogService>();
@@ -158,9 +159,13 @@ namespace Stokbox.App
             services.AddSingleton<ShopSettingsViewModel>();
             services.AddSingleton<SecurityViewModel>();
             services.AddSingleton<BackupViewModel>();
+            services.AddSingleton<AboutViewModel>();
             services.AddSingleton<SettingsViewModel>();
             services.AddSingleton<SaleViewModel>();
             services.AddSingleton<HistoryViewModel>();
+            services.AddSingleton<DashboardViewModel>(provider => new DashboardViewModel(
+                provider.GetRequiredService<IDashboardService>(),
+                provider.GetRequiredService<IErrorLog>()));
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<MainWindow>();
 

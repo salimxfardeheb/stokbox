@@ -20,7 +20,7 @@
         <TextBlock Text="{Binding ConfirmationError}" Style="{StaticResource FieldErrorStyle}" />
 
         <Button Content="Changer le mot de passe" Click="OnChangePasswordClick"
-                Style="{StaticResource ActionButtonStyle}" FontWeight="SemiBold"
+                Style="{StaticResource PrimaryButtonStyle}"
                 HorizontalAlignment="Left" Margin="0,22,0,0" />
         <TextBlock Text="{Binding StatusMessage}" Foreground="#1E6B34" TextWrapping="Wrap" Margin="0,10,0,0" />
     </StackPanel>

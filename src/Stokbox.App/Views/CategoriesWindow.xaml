@@ -8,6 +8,7 @@
         WindowStartupLocation="CenterOwner"
         FontFamily="Segoe UI" FontSize="14"
         UseLayoutRounding="True"
+        Background="{StaticResource AppBackgroundBrush}"
         FocusManager.FocusedElement="{Binding ElementName=NameBox}">
     <Grid Margin="20">
         <Grid.RowDefinitions>

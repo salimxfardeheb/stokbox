@@ -159,7 +159,7 @@
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding HasReturns}" Value="True">
                                 <Setter Property="Text" Value="{Binding RefundedText}" />
-                                <Setter Property="Foreground" Value="#1F2933" />
+                                <Setter Property="Foreground" Value="#1B2A55" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

@@ -35,13 +35,17 @@
                       Width="210" Margin="0,0,16,6" />
             <CheckBox Content="Afficher archivés"
                       IsChecked="{Binding ShowArchived, Mode=TwoWay}"
-                      VerticalAlignment="Center" Margin="0,0,0,6" />
+                      VerticalAlignment="Center" Margin="0,0,16,6" />
+            <CheckBox Content="En rupture uniquement"
+                      IsChecked="{Binding ShowOutOfStockOnly, Mode=TwoWay}"
+                      VerticalAlignment="Center" Margin="0,0,0,6"
+                      ToolTip="Produits non archivés dont le stock est à 0" />
         </WrapPanel>
 
         <!-- Actions -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,12">
             <Button Content="Nouveau" Command="{Binding NewCommand}"
-                    Style="{StaticResource ActionButtonStyle}" Margin="0,0,8,0" />
+                    Style="{StaticResource PrimaryButtonStyle}" Margin="0,0,8,0" />
             <Button Content="Modifier" Command="{Binding EditCommand}"
                     Style="{StaticResource ActionButtonStyle}" Margin="0,0,8,0" />
             <Button Content="{Binding ArchiveButtonText}" Command="{Binding ToggleArchiveCommand}"

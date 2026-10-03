@@ -18,7 +18,7 @@
         <TextBox Text="{Binding ShopPhone, UpdateSourceTrigger=PropertyChanged}" MaxLength="40" Padding="4,3" />
 
         <Button Content="Enregistrer" Command="{Binding SaveCommand}"
-                Style="{StaticResource ActionButtonStyle}" FontWeight="SemiBold"
+                Style="{StaticResource PrimaryButtonStyle}"
                 HorizontalAlignment="Left" Margin="0,22,0,0" />
         <TextBlock Text="{Binding StatusMessage}" Foreground="#1E6B34" TextWrapping="Wrap" Margin="0,10,0,0" />
     </StackPanel>

@@ -31,7 +31,11 @@ namespace Stokbox.Core.Tests.Fakes
         public IReadOnlyList<Product> Search(ProductSearchCriteria criteria)
         {
             LastCriteria = criteria;
-            return _products.Where(p => criteria.IncludeArchived || !p.IsArchived).Select(Copy).ToList();
+            return _products
+                .Where(p => criteria.IncludeArchived || !p.IsArchived)
+                .Where(p => !criteria.OutOfStockOnly || (!p.IsArchived && p.StockQuantity == 0))
+                .Select(Copy)
+                .ToList();
         }
 
         public long Insert(string barcode, string name, long categoryId, long purchasePriceCents, long salePriceCents, DateTime createdAtUtc)

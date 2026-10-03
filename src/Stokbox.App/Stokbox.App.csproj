@@ -8,6 +8,16 @@
     <RootNamespace>Stokbox.App</RootNamespace>
   </PropertyGroup>
 
+  <!-- Identité visuelle (dossier assets à la racine). L'icône de l'exécutable est aussi celle de toutes les fenêtres :
+       une fenêtre WPF sans icône propre reprend celle de l'exécutable. Générée par tools\make-icon.ps1. -->
+  <PropertyGroup Condition="Exists('..\..\assets\stokbox.ico')">
+    <ApplicationIcon>..\..\assets\stokbox.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup Condition="Exists('..\..\assets\logo.png')">
+    <Resource Include="..\..\assets\logo.png" Link="Assets\logo.png" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Stokbox.Core\Stokbox.Core.csproj" />
     <ProjectReference Include="..\Stokbox.Data\Stokbox.Data.csproj" />

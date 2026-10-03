@@ -13,5 +13,10 @@ namespace Stokbox.Core.Repositories
         public long? CategoryId { get; set; }
 
         public bool IncludeArchived { get; set; }
+
+        /// <summary>
+        /// Only the active (not archived) products with a stock quantity of 0.
+        /// </summary>
+        public bool OutOfStockOnly { get; set; }
     }
 }

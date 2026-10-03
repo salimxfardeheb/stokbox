@@ -8,6 +8,7 @@
         WindowStartupLocation="CenterOwner"
         FontFamily="Segoe UI" FontSize="14"
         UseLayoutRounding="True"
+        Background="{StaticResource AppBackgroundBrush}"
         FocusManager.FocusedElement="{Binding ElementName=NameBox}">
     <StackPanel Margin="24,10,24,22">
         <TextBlock Text="Code-barres" Style="{StaticResource FieldLabelStyle}" />
@@ -39,7 +40,7 @@
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,22,0,0">
             <Button Content="Enregistrer" Command="{Binding SaveCommand}" IsDefault="True"
-                    Style="{StaticResource ActionButtonStyle}" Margin="0,0,8,0" />
+                    Style="{StaticResource PrimaryButtonStyle}" Margin="0,0,8,0" />
             <Button Content="Annuler" IsCancel="True" Style="{StaticResource ActionButtonStyle}" />
         </StackPanel>
     </StackPanel>

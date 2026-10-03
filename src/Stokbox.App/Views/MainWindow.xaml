@@ -10,6 +10,9 @@
         FontFamily="Segoe UI" FontSize="14"
         UseLayoutRounding="True">
     <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:DashboardViewModel}">
+            <views:DashboardView />
+        </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:SaleViewModel}">
             <views:SaleView />
         </DataTemplate>
@@ -45,11 +48,11 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Container" Property="Background" Value="#2C3A47" />
+                                <Setter TargetName="Container" Property="Background" Value="#26386B" />
                             </Trigger>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Container" Property="Background" Value="#34495E" />
-                                <Setter TargetName="Container" Property="BorderBrush" Value="#4FA3E0" />
+                                <Setter TargetName="Container" Property="Background" Value="#2E4380" />
+                                <Setter TargetName="Container" Property="BorderBrush" Value="#E3262B" />
                                 <Setter Property="Foreground" Value="White" />
                                 <Setter Property="FontWeight" Value="SemiBold" />
                             </Trigger>
@@ -66,7 +69,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <DockPanel Grid.Column="0" Background="#1F2933">
+        <DockPanel Grid.Column="0" Background="#1B2A55">
             <TextBlock DockPanel.Dock="Top"
                        Text="Stokbox"
                        Foreground="White"
@@ -82,12 +85,12 @@
         </DockPanel>
 
         <!-- Zone de contenu : le titre, puis l'écran du menu sélectionné (vide tant que l'écran n'existe pas). -->
-        <Border Grid.Column="1" Background="#F4F6F8" Padding="32,26">
+        <Border Grid.Column="1" Background="#F7F5F0" Padding="32,26">
             <DockPanel>
                 <TextBlock DockPanel.Dock="Top"
                            Text="{Binding SelectedMenuItem.Title}"
                            FontSize="26" FontWeight="SemiBold"
-                           Foreground="#1F2933"
+                           Foreground="#1B2A55"
                            Margin="0,0,0,18" />
                 <ContentControl Content="{Binding CurrentPage}" Focusable="False" />
             </DockPanel>

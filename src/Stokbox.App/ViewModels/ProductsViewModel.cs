@@ -19,6 +19,7 @@ namespace Stokbox.App.ViewModels
         private string _searchText = string.Empty;
         private CategoryFilterOption _selectedCategoryFilter;
         private bool _showArchived;
+        private bool _showOutOfStockOnly;
         private Product _selectedProduct;
 
         // Set while the lists are rebuilt: the bindings then push transient values that must not trigger a search.
@@ -92,6 +93,21 @@ namespace Stokbox.App.ViewModels
             }
         }
 
+        /// <summary>
+        /// Only the active products with a stock quantity of 0.
+        /// </summary>
+        public bool ShowOutOfStockOnly
+        {
+            get => _showOutOfStockOnly;
+            set
+            {
+                if (SetProperty(ref _showOutOfStockOnly, value))
+                {
+                    ReloadProducts();
+                }
+            }
+        }
+
         public Product SelectedProduct
         {
             get => _selectedProduct;
@@ -118,6 +134,20 @@ namespace Stokbox.App.ViewModels
         {
             ReloadCategoryFilters();
             ReloadProducts();
+        }
+
+        /// <summary>
+        /// Sets the filters to "every product out of stock", whatever was searched before.
+        /// Nothing is read here: the list is read when the screen is shown.
+        /// </summary>
+        public void FilterOutOfStock()
+        {
+            _searchText = string.Empty;
+            _selectedCategoryFilter = null;
+            _showOutOfStockOnly = true;
+            OnPropertyChanged(nameof(SearchText));
+            OnPropertyChanged(nameof(SelectedCategoryFilter));
+            OnPropertyChanged(nameof(ShowOutOfStockOnly));
         }
 
         private void ReloadCategoryFilters()
@@ -155,7 +185,8 @@ namespace Stokbox.App.ViewModels
             {
                 Text = SearchText,
                 CategoryId = _selectedCategoryFilter?.Id,
-                IncludeArchived = ShowArchived
+                IncludeArchived = ShowArchived,
+                OutOfStockOnly = ShowOutOfStockOnly
             });
 
             _isReloading = true;

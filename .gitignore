@@ -5,3 +5,9 @@ obj/
 *.suo
 TestResults/
 installer/Output/
+
+# Installateurs produits par build-release.ps1
+dist/
+
+# Programme d'installation hors ligne de .NET Framework 4.8 (120 Mo, à déposer à la main)
+installer/redist/*.exe

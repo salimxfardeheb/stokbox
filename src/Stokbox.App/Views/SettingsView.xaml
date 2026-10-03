@@ -19,5 +19,8 @@
         <TabItem Header="Sauvegarde" Padding="14,6">
             <views:BackupSettingsView DataContext="{Binding Backup}" />
         </TabItem>
+        <TabItem Header="À propos" Padding="14,6">
+            <views:AboutSettingsView DataContext="{Binding About}" />
+        </TabItem>
     </TabControl>
 </UserControl>

@@ -1,0 +1,25 @@
+<UserControl x:Class="Stokbox.App.Views.AboutSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Focusable="False">
+    <StackPanel Width="560" HorizontalAlignment="Left">
+        <Image x:Name="LogoImage" Height="72" HorizontalAlignment="Left" Stretch="Uniform"
+               RenderOptions.BitmapScalingMode="HighQuality" Margin="0,0,0,10" Visibility="Collapsed" />
+        <TextBlock Text="Stokbox" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource NavyBrush}" />
+        <TextBlock Text="{Binding VersionText}" FontSize="16" Margin="0,2,0,0" />
+        <TextBlock Foreground="#52606D" TextWrapping="Wrap" Margin="0,8,0,0"
+                   Text="Gestion de stock, vente au comptoir et étiquettes de prix. Fonctionne entièrement hors ligne : aucune donnée ne quitte cet ordinateur." />
+
+        <TextBlock Text="Base de données" Style="{StaticResource FieldLabelStyle}" Margin="0,22,0,2" />
+        <TextBox Text="{Binding DatabaseFilePath, Mode=OneWay}" IsReadOnly="True" IsTabStop="False"
+                 BorderThickness="0" Background="Transparent" FontFamily="Consolas" />
+
+        <TextBlock Text="Sauvegardes automatiques" Style="{StaticResource FieldLabelStyle}" Margin="0,12,0,2" />
+        <TextBox Text="{Binding BackupsDirectory, Mode=OneWay}" IsReadOnly="True" IsTabStop="False"
+                 BorderThickness="0" Background="Transparent" FontFamily="Consolas" />
+
+        <TextBlock Text="Journaux d'erreurs" Style="{StaticResource FieldLabelStyle}" Margin="0,12,0,2" />
+        <TextBox Text="{Binding LogsDirectory, Mode=OneWay}" IsReadOnly="True" IsTabStop="False"
+                 BorderThickness="0" Background="Transparent" FontFamily="Consolas" />
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,10 @@
+Placer ici le programme d'installation HORS LIGNE de .NET Framework 4.8 :
+
+    ndp48-x86-x64-allos-enu.exe
+
+(page Microsoft « Télécharger .NET Framework 4.8 », lien « Offline installer », environ 120 Mo).
+
+L'installateur de Stokbox l'embarque et ne l'exécute que si .NET Framework 4.8 manque sur le poste
+(cas courant sous Windows 7 ; Windows 10 à partir de la version 1903 et Windows 11 l'ont déjà).
+
+Ce fichier n'est pas versionné dans le dépôt (voir .gitignore).

@@ -2,9 +2,58 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Application.Resources>
+        <!-- Couleurs de Stokbox : rouge des actions principales, bleu marine du menu et des titres, fond clair. -->
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#E3262B" />
+        <SolidColorBrush x:Key="NavyBrush" Color="#1B2A55" />
+        <SolidColorBrush x:Key="AppBackgroundBrush" Color="#F7F5F0" />
+
         <Style x:Key="ActionButtonStyle" TargetType="Button">
             <Setter Property="Padding" Value="14,6" />
             <Setter Property="MinWidth" Value="96" />
+        </Style>
+
+        <!-- Action principale d'un écran ou d'une fenêtre : une seule par endroit. -->
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Padding" Value="14,6" />
+            <Setter Property="MinWidth" Value="96" />
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}" />
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Chrome"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="2"
+                                Padding="{TemplateBinding Padding}"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                                              RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="#C81E23" />
+                                <Setter TargetName="Chrome" Property="BorderBrush" Value="#C81E23" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter TargetName="Chrome" Property="BorderBrush" Value="{StaticResource NavyBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Chrome" Property="Background" Value="#A9181D" />
+                                <Setter TargetName="Chrome" Property="BorderBrush" Value="#A9181D" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Chrome" Property="Background" Value="#DAD6CC" />
+                                <Setter TargetName="Chrome" Property="BorderBrush" Value="#DAD6CC" />
+                                <Setter Property="Foreground" Value="#8C877B" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <Style x:Key="FieldLabelStyle" TargetType="TextBlock">

@@ -8,7 +8,8 @@
         ShowInTaskbar="False"
         WindowStartupLocation="CenterOwner"
         FontFamily="Segoe UI" FontSize="14"
-        UseLayoutRounding="True">
+        UseLayoutRounding="True"
+        Background="{StaticResource AppBackgroundBrush}">
     <Window.Resources>
         <converters:MoneyConverter x:Key="MoneyConverter" />
 
@@ -54,7 +55,7 @@
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
                 <Button Content="Valider le retour" Command="{Binding ConfirmCommand}" IsDefault="True"
-                        Style="{StaticResource ActionButtonStyle}" FontWeight="SemiBold" Margin="0,0,8,0" />
+                        Style="{StaticResource PrimaryButtonStyle}" Margin="0,0,8,0" />
                 <Button Content="Annuler" IsCancel="True" Style="{StaticResource ActionButtonStyle}" />
             </StackPanel>
         </StackPanel>

@@ -28,6 +28,10 @@
             <Setter Property="Focusable" Value="False" />
             <Setter Property="Padding" Value="14,10" />
         </Style>
+        <Style x:Key="PrimarySideButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Padding" Value="14,10" />
+        </Style>
     </UserControl.Resources>
 
     <Grid>
@@ -75,19 +79,19 @@
             <DataGrid.Resources>
                 <!-- La ligne sélectionnée reste bien visible alors que le focus est dans la recherche. -->
                 <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="#CFE5F7" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#1F2933" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="#1B2A55" />
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#CFE5F7" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#1F2933" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="#1B2A55" />
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Désignation" Binding="{Binding Name}" Width="*" MinWidth="160"
+                <DataGridTextColumn Header="Désignation" Binding="{Binding Name}" Width="*" MinWidth="140"
                                     ElementStyle="{StaticResource LeftCellStyle}" />
                 <DataGridTextColumn Header="Prix unitaire"
                                     Binding="{Binding UnitPriceCents, Converter={StaticResource MoneyConverter}}"
                                     ElementStyle="{StaticResource RightAlignedCellStyle}"
                                     HeaderStyle="{StaticResource RightAlignedHeaderStyle}"
-                                    Width="140" />
-                <DataGridTemplateColumn Header="Quantité" Width="100" HeaderStyle="{StaticResource RightAlignedHeaderStyle}">
+                                    Width="120" />
+                <DataGridTemplateColumn Header="Quantité" Width="90" HeaderStyle="{StaticResource RightAlignedHeaderStyle}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding QuantityText, UpdateSourceTrigger=LostFocus}"
@@ -103,7 +107,7 @@
                                     ElementStyle="{StaticResource RightAlignedCellStyle}"
                                     HeaderStyle="{StaticResource RightAlignedHeaderStyle}"
                                     FontWeight="SemiBold"
-                                    Width="150" />
+                                    Width="130" />
             </DataGrid.Columns>
         </DataGrid>
 
@@ -112,7 +116,7 @@
 
         <!-- Total et encaissement -->
         <DockPanel Grid.Row="0" Grid.RowSpan="4" Grid.Column="2">
-            <Border DockPanel.Dock="Top" Background="#1F2933" Padding="18,14">
+            <Border DockPanel.Dock="Top" Background="#1B2A55" Padding="18,14">
                 <StackPanel>
                     <TextBlock Text="TOTAL" Foreground="#9AA5B1" FontSize="14" />
                     <Viewbox StretchDirection="DownOnly" HorizontalAlignment="Right" Height="64">
@@ -123,7 +127,7 @@
             </Border>
 
             <Button DockPanel.Dock="Top" Content="Encaisser (F2)" Command="{Binding CheckoutCommand}"
-                    Style="{StaticResource SideButtonStyle}" FontSize="18" FontWeight="SemiBold" Margin="0,14,0,0" />
+                    Style="{StaticResource PrimarySideButtonStyle}" FontSize="18" Margin="0,14,0,0" />
             <Button DockPanel.Dock="Top" Content="Vider le panier (Échap)" Command="{Binding ClearCartCommand}"
                     Style="{StaticResource SideButtonStyle}" Margin="0,8,0,0" />
 

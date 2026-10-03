@@ -11,7 +11,7 @@ namespace Stokbox.Data.Tests
     public class MigrationRunnerTests : IDisposable
     {
         // Bump when a new migration script is added.
-        private const int LatestVersion = 1;
+        private const int LatestVersion = 2;
 
         private static readonly string[] ExpectedTables =
         {
@@ -89,6 +89,21 @@ namespace Stokbox.Data.Tests
                 Assert.Equal(new[] { "name" }, IndexColumns(connection, "ix_products_name"));
                 Assert.Equal(new[] { "product_id" }, IndexColumns(connection, "ix_stock_movements_product_id"));
                 Assert.Equal(new[] { "created_at" }, IndexColumns(connection, "ix_sales_created_at"));
+            }
+        }
+
+        [Fact]
+        public void Dashboard_migration_adds_the_indexes_of_the_sales_and_returns_aggregations()
+        {
+            new MigrationRunner(_database.ConnectionFactory).MigrateToLatest();
+
+            using (var connection = _database.Open())
+            {
+                Assert.Equal(new[] { "sale_id" }, IndexColumns(connection, "ix_sale_lines_sale_id"));
+                Assert.Equal(new[] { "created_at" }, IndexColumns(connection, "ix_returns_created_at"));
+                Assert.Equal(new[] { "sale_id" }, IndexColumns(connection, "ix_returns_sale_id"));
+                Assert.Equal(new[] { "return_id" }, IndexColumns(connection, "ix_return_lines_return_id"));
+                Assert.Equal(new[] { "sale_line_id" }, IndexColumns(connection, "ix_return_lines_sale_line_id"));
             }
         }
 

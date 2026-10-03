@@ -7,9 +7,10 @@
         WindowStartupLocation="CenterScreen"
         FontFamily="Segoe UI" FontSize="14"
         UseLayoutRounding="True"
+        Background="{StaticResource AppBackgroundBrush}"
         FocusManager.FocusedElement="{Binding ElementName=ShopNameBox}">
     <StackPanel Margin="28,22,28,24">
-        <TextBlock Text="Bienvenue dans Stokbox" FontSize="22" FontWeight="SemiBold" Foreground="#1F2933" />
+        <TextBlock Text="Bienvenue dans Stokbox" FontSize="22" FontWeight="SemiBold" Foreground="#1B2A55" />
         <TextBlock Foreground="#52606D" TextWrapping="Wrap" Margin="0,4,0,0"
                    Text="Indiquez votre boutique et choisissez le mot de passe qui sera demandé à chaque démarrage." />
 
@@ -37,7 +38,7 @@
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
             <Button Content="Commencer" IsDefault="True" Click="OnStartClick"
-                    Style="{StaticResource ActionButtonStyle}" FontWeight="SemiBold" Margin="0,0,8,0" />
+                    Style="{StaticResource PrimaryButtonStyle}" Margin="0,0,8,0" />
             <Button Content="Quitter" IsCancel="True" Style="{StaticResource ActionButtonStyle}" />
         </StackPanel>
     </StackPanel>

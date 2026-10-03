@@ -6,9 +6,12 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         FontFamily="Segoe UI" FontSize="14"
-        UseLayoutRounding="True">
+        UseLayoutRounding="True"
+        Background="{StaticResource AppBackgroundBrush}">
     <StackPanel Margin="28,22,28,24">
-        <TextBlock Text="Stokbox" FontSize="24" FontWeight="SemiBold" Foreground="#1F2933" />
+        <Image x:Name="LogoImage" Height="84" HorizontalAlignment="Center" Stretch="Uniform"
+               RenderOptions.BitmapScalingMode="HighQuality" Margin="0,4,0,6" Visibility="Collapsed" />
+        <TextBlock x:Name="NameText" Text="Stokbox" FontSize="24" FontWeight="SemiBold" Foreground="#1B2A55" />
 
         <TextBlock Text="Mot de passe" Style="{StaticResource FieldLabelStyle}" />
         <PasswordBox x:Name="PasswordBox" Padding="4,3" MaxLength="128" PasswordChanged="OnPasswordChanged" />
@@ -16,7 +19,7 @@
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,22,0,0">
             <Button Content="Se connecter" IsDefault="True" Click="OnLoginClick"
-                    Style="{StaticResource ActionButtonStyle}" FontWeight="SemiBold" Margin="0,0,8,0" />
+                    Style="{StaticResource PrimaryButtonStyle}" Margin="0,0,8,0" />
             <Button Content="Quitter" IsCancel="True" Style="{StaticResource ActionButtonStyle}" />
         </StackPanel>
     </StackPanel>

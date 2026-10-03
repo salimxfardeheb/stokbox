@@ -61,13 +61,16 @@ namespace Stokbox.Data.Repositories
                         "WHERE (@Text IS NULL OR p.barcode = @Text OR instr(fold(p.name), @FoldedText) > 0) " +
                         "AND (@CategoryId IS NULL OR p.category_id = @CategoryId) " +
                         "AND (@IncludeArchived = 1 OR p.is_archived = 0) " +
+                        "AND (@OutOfStockOnly = 0 OR (p.is_archived = 0 AND " +
+                        "COALESCE((SELECT SUM(m.quantity) FROM stock_movements m WHERE m.product_id = p.id), 0) = 0)) " +
                         "ORDER BY fold(p.name), p.id",
                         new
                         {
                             Text = text,
                             FoldedText = TextNormalizer.Fold(text),
                             criteria.CategoryId,
-                            IncludeArchived = criteria.IncludeArchived ? 1 : 0
+                            IncludeArchived = criteria.IncludeArchived ? 1 : 0,
+                            OutOfStockOnly = criteria.OutOfStockOnly ? 1 : 0
                         })
                     .ToList();
             }
