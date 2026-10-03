@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
@@ -16,14 +18,22 @@ using Stokbox.Data.Repositories;
 
 namespace Stokbox.App
 {
-    public partial class App : Application
+    public partial class App : Application, IApplicationRestarter
     {
         private IErrorLog _errorLog;
         private ServiceProvider _services;
 
+        // The closing backup only makes sense once the user is in, and not when restarting after a restoration
+        // (the replaced database has just been backed up).
+        private bool _isAuthenticated;
+        private bool _isRestarting;
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+
+            // The login window opens and closes before the main one exists: closing it must not end the application.
+            ShutdownMode = ShutdownMode.OnExplicitShutdown;
 
             // The journal exists before anything else so that a failing startup is recorded too.
             var paths = AppPaths.CreateDefault();
@@ -45,25 +55,74 @@ namespace Stokbox.App
                 return;
             }
 
+            if (!Authenticate())
+            {
+                Shutdown(0);
+                return;
+            }
+
+            _isAuthenticated = true;
             MainWindow = _services.GetRequiredService<MainWindow>();
+            ShutdownMode = ShutdownMode.OnMainWindowClose;
             MainWindow.Show();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
+            if (_isAuthenticated && !_isRestarting)
+            {
+                BackupOnClose();
+            }
+
             _services?.Dispose();
             base.OnExit(e);
         }
 
-        private static ServiceProvider ConfigureServices(AppPaths paths, IErrorLog errorLog)
+        public void Restart()
+        {
+            _isRestarting = true;
+            Process.Start(Assembly.GetEntryAssembly().Location);
+            Shutdown(0);
+        }
+
+        // First launch: the shop and the administrator password are created. Afterwards: the password is asked.
+        private bool Authenticate()
+        {
+            var authService = _services.GetRequiredService<AuthService>();
+
+            Window window = authService.IsConfigured
+                ? (Window)new LoginWindow(new LoginViewModel(authService))
+                : new SetupWindow(new SetupViewModel(authService));
+
+            return window.ShowDialog() == true;
+        }
+
+        private void BackupOnClose()
+        {
+            try
+            {
+                _services.GetRequiredService<IBackupService>().BackupAutomatically();
+            }
+            catch (Exception ex)
+            {
+                // Closing must never be blocked by a failed backup; the journal keeps the reason.
+                _errorLog.Write("Sauvegarde à la fermeture", ex);
+            }
+        }
+
+        private ServiceProvider ConfigureServices(AppPaths paths, IErrorLog errorLog)
         {
             var services = new ServiceCollection();
 
             services.AddSingleton(paths);
             services.AddSingleton(errorLog);
             services.AddSingleton(new SqliteConnectionFactory(paths.DatabaseFilePath));
-            services.AddSingleton<IDatabaseMigrator>(
-                provider => new MigrationRunner(provider.GetRequiredService<SqliteConnectionFactory>()));
+            services.AddSingleton(provider => new MigrationRunner(provider.GetRequiredService<SqliteConnectionFactory>()));
+            services.AddSingleton<IDatabaseMigrator>(provider => provider.GetRequiredService<MigrationRunner>());
+            services.AddSingleton<IBackupService>(provider => new SqliteBackupService(
+                provider.GetRequiredService<SqliteConnectionFactory>(),
+                paths.BackupsDirectory,
+                provider.GetRequiredService<MigrationRunner>().LatestVersion));
 
             services.AddSingleton<ICategoryRepository, CategoryRepository>();
             services.AddSingleton<IProductRepository, ProductRepository>();
@@ -76,12 +135,15 @@ namespace Stokbox.App
             services.AddSingleton<ISettingsRepository, SettingsRepository>();
             services.AddSingleton<LabelSettingsService>();
             services.AddSingleton<ReceiptSettingsService>();
+            services.AddSingleton<AuthService>();
             services.AddSingleton<ISaleRepository, SaleRepository>();
             services.AddSingleton<SaleService>(provider => new SaleService(
                 provider.GetRequiredService<IProductRepository>(),
                 provider.GetRequiredService<ISaleRepository>()));
 
             services.AddSingleton<IDialogService, DialogService>();
+            services.AddSingleton<IFileDialogService, FileDialogService>();
+            services.AddSingleton<IApplicationRestarter>(this);
             services.AddSingleton<IPrinterCatalog, WindowsPrinters>();
             services.AddSingleton<ILabelPrintService, LabelPrintService>();
             services.AddSingleton<IReceiptPrintService, ReceiptPrintService>();
@@ -93,6 +155,9 @@ namespace Stokbox.App
             services.AddSingleton<LabelsViewModel>();
             services.AddSingleton<LabelSettingsViewModel>();
             services.AddSingleton<ReceiptSettingsViewModel>();
+            services.AddSingleton<ShopSettingsViewModel>();
+            services.AddSingleton<SecurityViewModel>();
+            services.AddSingleton<BackupViewModel>();
             services.AddSingleton<SettingsViewModel>();
             services.AddSingleton<SaleViewModel>();
             services.AddSingleton<HistoryViewModel>();

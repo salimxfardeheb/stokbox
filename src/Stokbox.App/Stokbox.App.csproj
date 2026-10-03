@@ -23,6 +23,8 @@
     <!-- Impression WPF : files d'impression Windows et écriture du document vers le pilote. -->
     <Reference Include="ReachFramework" />
     <Reference Include="System.Printing" />
+    <!-- Sélecteur de dossier Windows (sauvegarde manuelle) : WPF ne le fournit pas sur .NET Framework. -->
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
 
 </Project>

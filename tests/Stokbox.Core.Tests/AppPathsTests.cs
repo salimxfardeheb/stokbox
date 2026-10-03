@@ -15,6 +15,7 @@ namespace Stokbox.Core.Tests
 
             Assert.Equal(Path.Combine(root, "stokbox.db"), paths.DatabaseFilePath);
             Assert.Equal(Path.Combine(root, "logs"), paths.LogsDirectory);
+            Assert.Equal(Path.Combine(root, "backups"), paths.BackupsDirectory);
         }
 
         [Fact]

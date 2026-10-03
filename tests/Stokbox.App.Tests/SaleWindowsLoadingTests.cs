@@ -70,15 +70,44 @@ namespace Stokbox.App.Tests
                 Assert.Equal(2, Descendants<TextBox>(returnWindow).Count());
                 returnWindow.Close();
 
+                var auth = new AuthService(new StubSettings(), new ReceiptSettingsService(new StubSettings()));
                 var settings = new SettingsView
                 {
                     DataContext = new SettingsViewModel(
+                        new ShopSettingsViewModel(new ReceiptSettingsService(new StubSettings())),
                         new LabelSettingsViewModel(new LabelSettingsService(new StubSettings()), null, new StubPrinters()),
-                        new ReceiptSettingsViewModel(new ReceiptSettingsService(new StubSettings()), new StubReceipts(), new StubPrinters()))
+                        new ReceiptSettingsViewModel(new ReceiptSettingsService(new StubSettings()), new StubReceipts(), new StubPrinters()),
+                        new SecurityViewModel(auth),
+                        new BackupViewModel(new StubBackups(), null, new StubDialogs(), null))
                 };
                 ((SettingsViewModel)settings.DataContext).Load();
                 Layout(settings, 1000, 600);
-                Assert.Equal(2, Descendants<TabItem>(settings).Count());
+                var tabs = Descendants<TabControl>(settings).Single();
+                Assert.Equal(
+                    new[] { "Boutique", "Étiquettes", "Ticket", "Sécurité", "Sauvegarde" },
+                    tabs.Items.Cast<TabItem>().Select(tab => (string)tab.Header));
+
+                // Each tab builds its content when it is shown.
+                for (var i = 0; i < tabs.Items.Count; i++)
+                {
+                    tabs.SelectedIndex = i;
+                    Layout(settings, 1000, 600);
+                }
+
+                tabs.SelectedIndex = 3;
+                Layout(settings, 1000, 600);
+                Assert.Equal(3, Descendants<PasswordBox>(settings).Count());
+
+                var login = new LoginWindow(new LoginViewModel(auth));
+                Layout((FrameworkElement)login.Content, 400, 300);
+                Assert.Single(Descendants<PasswordBox>(login));
+                login.Close();
+
+                var setup = new SetupWindow(new SetupViewModel(auth));
+                Layout((FrameworkElement)setup.Content, 480, 600);
+                Assert.Equal(2, Descendants<PasswordBox>(setup).Count());
+                Assert.Equal(3, Descendants<TextBox>(setup).Count());
+                setup.Close();
             });
         }
 
@@ -203,6 +232,21 @@ namespace Stokbox.App.Tests
             public void Save(IReadOnlyDictionary<string, string> values)
             {
             }
+        }
+
+        private sealed class StubBackups : IBackupService
+        {
+            public string BackupsDirectory => "C:/ProgramData/Stokbox/backups";
+
+            public string BackupTo(string directory) => null;
+
+            public string BackupAutomatically() => null;
+
+            public void CheckRestorable(string filePath)
+            {
+            }
+
+            public string Restore(string filePath) => null;
         }
 
         private sealed class StubPrinters : IPrinterCatalog

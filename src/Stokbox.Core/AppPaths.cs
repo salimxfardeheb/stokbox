@@ -11,6 +11,7 @@ namespace Stokbox.Core
         public const string AppFolderName = "Stokbox";
         public const string DatabaseFileName = "stokbox.db";
         public const string LogsFolderName = "logs";
+        public const string BackupsFolderName = "backups";
 
         public AppPaths(string dataDirectory)
         {
@@ -27,6 +28,11 @@ namespace Stokbox.Core
         public string DatabaseFilePath => Path.Combine(DataDirectory, DatabaseFileName);
 
         public string LogsDirectory => Path.Combine(DataDirectory, LogsFolderName);
+
+        /// <summary>
+        /// Folder of the automatic backups.
+        /// </summary>
+        public string BackupsDirectory => Path.Combine(DataDirectory, BackupsFolderName);
 
         /// <summary>
         /// Paths under %ProgramData%\Stokbox.

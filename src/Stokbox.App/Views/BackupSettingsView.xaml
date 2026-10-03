@@ -1,0 +1,31 @@
+<UserControl x:Class="Stokbox.App.Views.BackupSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Focusable="False">
+    <StackPanel Width="560" HorizontalAlignment="Left">
+        <TextBlock Text="Sauvegarde" FontSize="18" FontWeight="SemiBold" />
+        <TextBlock Foreground="#52606D" TextWrapping="Wrap" Margin="0,4,0,0"
+                   Text="Une sauvegarde contient toutes les données : produits, stock, ventes, paramètres et mot de passe." />
+
+        <TextBlock Text="Sauvegarde automatique" FontWeight="SemiBold" Margin="0,18,0,0" />
+        <TextBlock TextWrapping="Wrap" Margin="0,4,0,0"
+                   Text="À chaque fermeture de Stokbox, une sauvegarde est enregistrée dans le dossier ci-dessous. Les 7 plus récentes sont conservées." />
+        <TextBox Text="{Binding BackupsDirectory, Mode=OneWay}" IsReadOnly="True" IsTabStop="False"
+                 BorderThickness="0" Background="Transparent" FontFamily="Consolas" Margin="0,4,0,0" />
+
+        <TextBlock Text="Sauvegarde manuelle" FontWeight="SemiBold" Margin="0,22,0,0" />
+        <TextBlock TextWrapping="Wrap" Margin="0,4,0,0"
+                   Text="Enregistrez régulièrement une sauvegarde sur une clé USB : elle protège vos données si cet ordinateur tombe en panne." />
+        <Button Content="Sauvegarder maintenant…" Command="{Binding BackupNowCommand}"
+                Style="{StaticResource ActionButtonStyle}" FontWeight="SemiBold"
+                HorizontalAlignment="Left" Margin="0,10,0,0" />
+        <TextBlock Text="{Binding StatusMessage}" Foreground="#1E6B34" TextWrapping="Wrap" Margin="0,10,0,0" />
+
+        <TextBlock Text="Restauration" FontWeight="SemiBold" Margin="0,22,0,0" />
+        <TextBlock TextWrapping="Wrap" Margin="0,4,0,0"
+                   Text="Remplace toutes les données actuelles par celles d'une sauvegarde. La base actuelle est sauvegardée avant d'être remplacée, puis Stokbox redémarre." />
+        <Button Content="Restaurer une sauvegarde…" Command="{Binding RestoreCommand}"
+                Style="{StaticResource ActionButtonStyle}"
+                HorizontalAlignment="Left" Margin="0,10,0,0" />
+    </StackPanel>
+</UserControl>

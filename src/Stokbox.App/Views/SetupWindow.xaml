@@ -1,0 +1,44 @@
+<Window x:Class="Stokbox.App.Views.SetupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Stokbox - Premier lancement"
+        Width="480" SizeToContent="Height"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI" FontSize="14"
+        UseLayoutRounding="True"
+        FocusManager.FocusedElement="{Binding ElementName=ShopNameBox}">
+    <StackPanel Margin="28,22,28,24">
+        <TextBlock Text="Bienvenue dans Stokbox" FontSize="22" FontWeight="SemiBold" Foreground="#1F2933" />
+        <TextBlock Foreground="#52606D" TextWrapping="Wrap" Margin="0,4,0,0"
+                   Text="Indiquez votre boutique et choisissez le mot de passe qui sera demandé à chaque démarrage." />
+
+        <TextBlock Text="Nom de la boutique" Style="{StaticResource FieldLabelStyle}" />
+        <TextBox x:Name="ShopNameBox" Text="{Binding ShopName, UpdateSourceTrigger=PropertyChanged}" MaxLength="60" Padding="4,3" />
+        <TextBlock Text="{Binding ShopNameError}" Style="{StaticResource FieldErrorStyle}" />
+
+        <TextBlock Text="Adresse" Style="{StaticResource FieldLabelStyle}" />
+        <TextBox Text="{Binding ShopAddress, UpdateSourceTrigger=PropertyChanged}" MaxLength="120" Padding="4,3" />
+
+        <TextBlock Text="Téléphone" Style="{StaticResource FieldLabelStyle}" />
+        <TextBox Text="{Binding ShopPhone, UpdateSourceTrigger=PropertyChanged}" MaxLength="40" Padding="4,3" />
+
+        <TextBlock Text="Mot de passe administrateur (8 caractères minimum)" Style="{StaticResource FieldLabelStyle}" />
+        <PasswordBox x:Name="PasswordBox" Padding="4,3" MaxLength="128" />
+        <TextBlock Text="{Binding PasswordError}" Style="{StaticResource FieldErrorStyle}" />
+
+        <TextBlock Text="Confirmation du mot de passe" Style="{StaticResource FieldLabelStyle}" />
+        <PasswordBox x:Name="ConfirmationBox" Padding="4,3" MaxLength="128" />
+        <TextBlock Text="{Binding ConfirmationError}" Style="{StaticResource FieldErrorStyle}" />
+
+        <TextBlock Foreground="#7B8794" FontSize="12" TextWrapping="Wrap" Margin="0,12,0,0"
+                   Text="Notez ce mot de passe en lieu sûr : il ne peut pas être récupéré s'il est oublié." />
+        <TextBlock Text="{Binding GeneralError}" Style="{StaticResource FieldErrorStyle}" Margin="0,8,0,0" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Commencer" IsDefault="True" Click="OnStartClick"
+                    Style="{StaticResource ActionButtonStyle}" FontWeight="SemiBold" Margin="0,0,8,0" />
+            <Button Content="Quitter" IsCancel="True" Style="{StaticResource ActionButtonStyle}" />
+        </StackPanel>
+    </StackPanel>
+</Window>

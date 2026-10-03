@@ -10,7 +10,7 @@ using Stokbox.Core.Services;
 namespace Stokbox.App.ViewModels
 {
     /// <summary>
-    /// Settings > Shop and receipt: what heads the receipts, and the receipt printer.
+    /// Settings > Receipt: the receipt printer, or none.
     /// </summary>
     public sealed class ReceiptSettingsViewModel : ObservableObject
     {
@@ -18,9 +18,6 @@ namespace Stokbox.App.ViewModels
         private readonly IReceiptPrintService _receiptPrintService;
         private readonly IPrinterCatalog _printers;
 
-        private string _shopName = string.Empty;
-        private string _shopAddress = string.Empty;
-        private string _shopPhone = string.Empty;
         private PrinterOption _selectedPrinter;
         private string _statusMessage;
         private bool _isLoading;
@@ -44,24 +41,6 @@ namespace Stokbox.App.ViewModels
         public RelayCommand SaveCommand { get; }
 
         public RelayCommand PrintTestCommand { get; }
-
-        public string ShopName
-        {
-            get => _shopName;
-            set => SetInput(ref _shopName, value, nameof(ShopName));
-        }
-
-        public string ShopAddress
-        {
-            get => _shopAddress;
-            set => SetInput(ref _shopAddress, value, nameof(ShopAddress));
-        }
-
-        public string ShopPhone
-        {
-            get => _shopPhone;
-            set => SetInput(ref _shopPhone, value, nameof(ShopPhone));
-        }
 
         public PrinterOption SelectedPrinter
         {
@@ -115,10 +94,6 @@ namespace Stokbox.App.ViewModels
                 _isLoading = false;
             }
 
-            ShopName = settings.ShopName ?? string.Empty;
-            ShopAddress = settings.ShopAddress ?? string.Empty;
-            ShopPhone = settings.ShopPhone ?? string.Empty;
-
             _selectedPrinter = PrinterOptions.FirstOrDefault(
                     option => string.Equals(option.Name, settings.PrinterName, StringComparison.OrdinalIgnoreCase))
                 ?? PrinterOptions[0];
@@ -127,23 +102,12 @@ namespace Stokbox.App.ViewModels
             StatusMessage = null;
         }
 
-        private void SetInput(ref string field, string value, string propertyName)
-        {
-            if (SetProperty(ref field, value, propertyName))
-            {
-                StatusMessage = null;
-            }
-        }
-
+        // The shop details belong to another tab: they are kept as saved.
         private ReceiptSettings ReadForm()
         {
-            return new ReceiptSettings
-            {
-                ShopName = ShopName,
-                ShopAddress = ShopAddress,
-                ShopPhone = ShopPhone,
-                PrinterName = _selectedPrinter?.Name
-            };
+            var settings = _settingsService.Get();
+            settings.PrinterName = _selectedPrinter?.Name;
+            return settings;
         }
 
         private void Save()

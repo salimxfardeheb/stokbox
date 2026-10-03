@@ -3,18 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Focusable="False">
     <StackPanel Width="460" HorizontalAlignment="Left">
-        <TextBlock Text="Boutique et ticket" FontSize="18" FontWeight="SemiBold" />
+        <TextBlock Text="Ticket de caisse" FontSize="18" FontWeight="SemiBold" />
         <TextBlock Foreground="#52606D" TextWrapping="Wrap" Margin="0,4,0,0"
-                   Text="Ces informations sont imprimées en tête du ticket de caisse (imprimante ticket 80 mm)." />
-
-        <TextBlock Text="Nom de la boutique" Style="{StaticResource FieldLabelStyle}" />
-        <TextBox Text="{Binding ShopName, UpdateSourceTrigger=PropertyChanged}" MaxLength="60" Padding="4,3" />
-
-        <TextBlock Text="Adresse" Style="{StaticResource FieldLabelStyle}" />
-        <TextBox Text="{Binding ShopAddress, UpdateSourceTrigger=PropertyChanged}" MaxLength="120" Padding="4,3" />
-
-        <TextBlock Text="Téléphone" Style="{StaticResource FieldLabelStyle}" />
-        <TextBox Text="{Binding ShopPhone, UpdateSourceTrigger=PropertyChanged}" MaxLength="40" Padding="4,3" />
+                   Text="Imprimante ticket 80 mm. Le nom, l'adresse et le téléphone imprimés en tête se règlent dans l'onglet Boutique." />
 
         <TextBlock Text="Imprimante ticket" Style="{StaticResource FieldLabelStyle}" />
         <ComboBox ItemsSource="{Binding PrinterOptions}"

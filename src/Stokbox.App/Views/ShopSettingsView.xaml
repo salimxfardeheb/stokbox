@@ -1,0 +1,25 @@
+<UserControl x:Class="Stokbox.App.Views.ShopSettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Focusable="False">
+    <StackPanel Width="460" HorizontalAlignment="Left">
+        <TextBlock Text="Boutique" FontSize="18" FontWeight="SemiBold" />
+        <TextBlock Foreground="#52606D" TextWrapping="Wrap" Margin="0,4,0,0"
+                   Text="Ces informations sont imprimées en tête du ticket de caisse." />
+
+        <TextBlock Text="Nom de la boutique" Style="{StaticResource FieldLabelStyle}" />
+        <TextBox Text="{Binding ShopName, UpdateSourceTrigger=PropertyChanged}" MaxLength="60" Padding="4,3" />
+        <TextBlock Text="{Binding ShopNameError}" Style="{StaticResource FieldErrorStyle}" />
+
+        <TextBlock Text="Adresse" Style="{StaticResource FieldLabelStyle}" />
+        <TextBox Text="{Binding ShopAddress, UpdateSourceTrigger=PropertyChanged}" MaxLength="120" Padding="4,3" />
+
+        <TextBlock Text="Téléphone" Style="{StaticResource FieldLabelStyle}" />
+        <TextBox Text="{Binding ShopPhone, UpdateSourceTrigger=PropertyChanged}" MaxLength="40" Padding="4,3" />
+
+        <Button Content="Enregistrer" Command="{Binding SaveCommand}"
+                Style="{StaticResource ActionButtonStyle}" FontWeight="SemiBold"
+                HorizontalAlignment="Left" Margin="0,22,0,0" />
+        <TextBlock Text="{Binding StatusMessage}" Foreground="#1E6B34" TextWrapping="Wrap" Margin="0,10,0,0" />
+    </StackPanel>
+</UserControl>

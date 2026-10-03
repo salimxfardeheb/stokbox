@@ -4,11 +4,20 @@
              xmlns:views="clr-namespace:Stokbox.App.Views"
              Focusable="False">
     <TabControl Background="Transparent" BorderThickness="0,1,0,0" BorderBrush="#CBD2D9" Padding="0,16,0,0">
+        <TabItem Header="Boutique" Padding="14,6">
+            <views:ShopSettingsView DataContext="{Binding Shop}" />
+        </TabItem>
         <TabItem Header="Étiquettes" Padding="14,6">
             <views:LabelSettingsView DataContext="{Binding Labels}" />
         </TabItem>
-        <TabItem Header="Boutique et ticket" Padding="14,6">
+        <TabItem Header="Ticket" Padding="14,6">
             <views:ReceiptSettingsView DataContext="{Binding Receipt}" />
+        </TabItem>
+        <TabItem Header="Sécurité" Padding="14,6">
+            <views:SecuritySettingsView DataContext="{Binding Security}" />
+        </TabItem>
+        <TabItem Header="Sauvegarde" Padding="14,6">
+            <views:BackupSettingsView DataContext="{Binding Backup}" />
         </TabItem>
     </TabControl>
 </UserControl>

@@ -1,0 +1,27 @@
+<UserControl x:Class="Stokbox.App.Views.SecuritySettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Focusable="False">
+    <StackPanel Width="460" HorizontalAlignment="Left">
+        <TextBlock Text="Sécurité" FontSize="18" FontWeight="SemiBold" />
+        <TextBlock Foreground="#52606D" TextWrapping="Wrap" Margin="0,4,0,0"
+                   Text="Changement du mot de passe demandé au démarrage de Stokbox." />
+
+        <TextBlock Text="Mot de passe actuel" Style="{StaticResource FieldLabelStyle}" />
+        <PasswordBox x:Name="CurrentPasswordBox" Padding="4,3" MaxLength="128" />
+        <TextBlock Text="{Binding CurrentPasswordError}" Style="{StaticResource FieldErrorStyle}" />
+
+        <TextBlock Text="Nouveau mot de passe (8 caractères minimum)" Style="{StaticResource FieldLabelStyle}" />
+        <PasswordBox x:Name="NewPasswordBox" Padding="4,3" MaxLength="128" />
+        <TextBlock Text="{Binding NewPasswordError}" Style="{StaticResource FieldErrorStyle}" />
+
+        <TextBlock Text="Confirmation du nouveau mot de passe" Style="{StaticResource FieldLabelStyle}" />
+        <PasswordBox x:Name="ConfirmationBox" Padding="4,3" MaxLength="128" />
+        <TextBlock Text="{Binding ConfirmationError}" Style="{StaticResource FieldErrorStyle}" />
+
+        <Button Content="Changer le mot de passe" Click="OnChangePasswordClick"
+                Style="{StaticResource ActionButtonStyle}" FontWeight="SemiBold"
+                HorizontalAlignment="Left" Margin="0,22,0,0" />
+        <TextBlock Text="{Binding StatusMessage}" Foreground="#1E6B34" TextWrapping="Wrap" Margin="0,10,0,0" />
+    </StackPanel>
+</UserControl>
