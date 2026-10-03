@@ -13,6 +13,9 @@
         <DataTemplate DataType="{x:Type viewModels:ProductsViewModel}">
             <views:ProductsView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:StockEntriesViewModel}">
+            <views:StockEntriesView />
+        </DataTemplate>
 
         <Style x:Key="SideMenuItemStyle" TargetType="ListBoxItem">
             <Setter Property="Foreground" Value="#D5DCE4" />

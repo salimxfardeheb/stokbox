@@ -70,9 +70,16 @@ namespace Stokbox.App
             services.AddSingleton<BarcodeGenerator>();
             services.AddSingleton<CategoryService>();
             services.AddSingleton<ProductService>();
+            services.AddSingleton<IStockMovementRepository, StockMovementRepository>();
+            services.AddSingleton<StockService>();
 
             services.AddSingleton<IDialogService, DialogService>();
+            services.AddSingleton<ILabelPrintService, ComingSoonLabelPrintService>();
+
+            // One search per screen: each keeps its own text and results.
+            services.AddTransient<ProductSearchViewModel>();
             services.AddSingleton<ProductsViewModel>();
+            services.AddSingleton<StockEntriesViewModel>();
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<MainWindow>();
 

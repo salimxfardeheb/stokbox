@@ -6,19 +6,22 @@ namespace Stokbox.App.ViewModels
     public sealed class MainViewModel : ObservableObject
     {
         private const string ProductsKey = "products";
+        private const string StockEntriesKey = "stock-entries";
 
         private readonly ProductsViewModel _products;
+        private readonly StockEntriesViewModel _stockEntries;
         private NavigationItem _selectedMenuItem;
         private object _currentPage;
 
-        public MainViewModel(ProductsViewModel products)
+        public MainViewModel(ProductsViewModel products, StockEntriesViewModel stockEntries)
         {
             _products = products;
+            _stockEntries = stockEntries;
             MenuItems = new[]
             {
                 new NavigationItem("sale", "Vente"),
                 new NavigationItem(ProductsKey, "Produits"),
-                new NavigationItem("stock-entries", "Entrées de stock"),
+                new NavigationItem(StockEntriesKey, "Entrées de stock"),
                 new NavigationItem("labels", "Étiquettes"),
                 new NavigationItem("history", "Historique"),
                 new NavigationItem("settings", "Paramètres")
@@ -55,6 +58,10 @@ namespace Stokbox.App.ViewModels
             {
                 _products.Refresh();
                 CurrentPage = _products;
+            }
+            else if (item != null && item.Key == StockEntriesKey)
+            {
+                CurrentPage = _stockEntries;
             }
             else
             {

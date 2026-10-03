@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Dapper;
 using Stokbox.Core;
@@ -32,6 +31,16 @@ namespace Stokbox.Data.Repositories
             using (var connection = _connectionFactory.Open())
             {
                 return connection.QuerySingleOrDefault<Product>(SelectSql + "WHERE p.id = @Id", new { Id = id });
+            }
+        }
+
+        public Product GetByBarcode(string barcode)
+        {
+            using (var connection = _connectionFactory.Open())
+            {
+                return connection.QuerySingleOrDefault<Product>(
+                    SelectSql + "WHERE p.barcode = @Barcode",
+                    new { Barcode = barcode });
             }
         }
 
@@ -79,7 +88,7 @@ namespace Stokbox.Data.Repositories
                         CategoryId = categoryId,
                         PurchasePriceCents = purchasePriceCents,
                         SalePriceCents = salePriceCents,
-                        CreatedAt = createdAtUtc.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'", CultureInfo.InvariantCulture)
+                        CreatedAt = SqliteDates.ToText(createdAtUtc)
                     });
             }
         }

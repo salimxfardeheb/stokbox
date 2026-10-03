@@ -9,6 +9,11 @@ namespace Stokbox.Core.Repositories
         Product GetById(long id);
 
         /// <summary>
+        /// The product carrying exactly this barcode, archived or not; null when there is none.
+        /// </summary>
+        Product GetByBarcode(string barcode);
+
+        /// <summary>
         /// Products matching the criteria, sorted by name, with their stock quantity.
         /// </summary>
         IReadOnlyList<Product> Search(ProductSearchCriteria criteria);

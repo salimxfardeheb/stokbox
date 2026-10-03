@@ -53,6 +53,15 @@ namespace Stokbox.Core.Services
         }
 
         /// <summary>
+        /// The product carrying exactly this barcode, archived or not; null when there is none.
+        /// </summary>
+        public Product FindByBarcode(string barcode)
+        {
+            var code = (barcode ?? string.Empty).Trim();
+            return code.Length == 0 ? null : _products.GetByBarcode(code);
+        }
+
+        /// <summary>
         /// At most one error per field; empty when the input is valid.
         /// </summary>
         public IReadOnlyList<ValidationError> Validate(ProductInput input)
