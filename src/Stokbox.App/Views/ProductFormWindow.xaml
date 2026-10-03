@@ -1,0 +1,46 @@
+<Window x:Class="Stokbox.App.Views.ProductFormWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="{Binding Title}"
+        Width="460" SizeToContent="Height"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        FontFamily="Segoe UI" FontSize="14"
+        UseLayoutRounding="True"
+        FocusManager.FocusedElement="{Binding ElementName=NameBox}">
+    <StackPanel Margin="24,10,24,22">
+        <TextBlock Text="Code-barres" Style="{StaticResource FieldLabelStyle}" />
+        <TextBlock Text="{Binding BarcodeText}" Foreground="#52606D" FontFamily="Consolas" />
+
+        <TextBlock Text="Désignation" Style="{StaticResource FieldLabelStyle}" />
+        <TextBox x:Name="NameBox"
+                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                 MaxLength="120" Padding="4,3" />
+        <TextBlock Text="{Binding NameError}" Style="{StaticResource FieldErrorStyle}" />
+
+        <TextBlock Text="Catégorie" Style="{StaticResource FieldLabelStyle}" />
+        <ComboBox ItemsSource="{Binding Categories}"
+                  SelectedItem="{Binding SelectedCategory, Mode=TwoWay}"
+                  DisplayMemberPath="Name" />
+        <TextBlock Text="{Binding CategoryError}" Style="{StaticResource FieldErrorStyle}" />
+
+        <TextBlock Text="Prix d'achat (DA)" Style="{StaticResource FieldLabelStyle}" />
+        <TextBox Text="{Binding PurchasePriceText, UpdateSourceTrigger=PropertyChanged}"
+                 MaxLength="20" Padding="4,3" />
+        <TextBlock Text="{Binding PurchasePriceError}" Style="{StaticResource FieldErrorStyle}" />
+
+        <TextBlock Text="Prix de vente (DA)" Style="{StaticResource FieldLabelStyle}" />
+        <TextBox Text="{Binding SalePriceText, UpdateSourceTrigger=PropertyChanged}"
+                 MaxLength="20" Padding="4,3" />
+        <TextBlock Text="{Binding SalePriceError}" Style="{StaticResource FieldErrorStyle}" />
+
+        <TextBlock Text="{Binding GeneralError}" Style="{StaticResource FieldErrorStyle}" Margin="0,14,0,0" />
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,22,0,0">
+            <Button Content="Enregistrer" Command="{Binding SaveCommand}" IsDefault="True"
+                    Style="{StaticResource ActionButtonStyle}" Margin="0,0,8,0" />
+            <Button Content="Annuler" IsCancel="True" Style="{StaticResource ActionButtonStyle}" />
+        </StackPanel>
+    </StackPanel>
+</Window>

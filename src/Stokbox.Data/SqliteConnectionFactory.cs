@@ -43,6 +43,7 @@ namespace Stokbox.Data
             try
             {
                 connection.Open();
+                FoldFunction.Bind(connection);
                 return connection;
             }
             catch

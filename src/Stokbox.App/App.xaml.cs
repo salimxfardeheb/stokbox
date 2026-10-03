@@ -7,9 +7,11 @@ using Stokbox.App.Services;
 using Stokbox.App.ViewModels;
 using Stokbox.App.Views;
 using Stokbox.Core;
+using Stokbox.Core.Repositories;
 using Stokbox.Core.Services;
 using Stokbox.Data;
 using Stokbox.Data.Migrations;
+using Stokbox.Data.Repositories;
 
 namespace Stokbox.App
 {
@@ -62,6 +64,15 @@ namespace Stokbox.App
             services.AddSingleton<IDatabaseMigrator>(
                 provider => new MigrationRunner(provider.GetRequiredService<SqliteConnectionFactory>()));
 
+            services.AddSingleton<ICategoryRepository, CategoryRepository>();
+            services.AddSingleton<IProductRepository, ProductRepository>();
+            services.AddSingleton<IBarcodeSequence, SqliteBarcodeSequence>();
+            services.AddSingleton<BarcodeGenerator>();
+            services.AddSingleton<CategoryService>();
+            services.AddSingleton<ProductService>();
+
+            services.AddSingleton<IDialogService, DialogService>();
+            services.AddSingleton<ProductsViewModel>();
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<MainWindow>();
 
