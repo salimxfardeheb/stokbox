@@ -95,6 +95,7 @@ namespace Stokbox.App
             services.AddSingleton<ReceiptSettingsViewModel>();
             services.AddSingleton<SettingsViewModel>();
             services.AddSingleton<SaleViewModel>();
+            services.AddSingleton<HistoryViewModel>();
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<MainWindow>();
 

@@ -19,6 +19,9 @@ namespace Stokbox.App.Services
         /// <returns>True when the sale was recorded.</returns>
         bool ShowPayment(PaymentViewModel viewModel);
 
+        /// <returns>True when the return was recorded.</returns>
+        bool ShowReturn(ReturnViewModel viewModel);
+
         /// <summary>
         /// Yes/no question answered from the keyboard: Enter for yes, Escape for no.
         /// </summary>

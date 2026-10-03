@@ -347,6 +347,11 @@ namespace Stokbox.App.Tests
                 return AskAnswer;
             }
 
+            public bool ShowReturn(ReturnViewModel viewModel)
+            {
+                return false;
+            }
+
             public bool Confirm(string message)
             {
                 return ConfirmAnswer;

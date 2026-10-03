@@ -5,6 +5,8 @@ namespace Stokbox.Core.Entities
     /// </summary>
     public sealed class SaleLine
     {
+        public long Id { get; set; }
+
         public long ProductId { get; set; }
 
         public string ProductName { get; set; }
@@ -16,5 +18,15 @@ namespace Stokbox.Core.Entities
         public long UnitPurchasePriceCents { get; set; }
 
         public long LineTotalCents { get; set; }
+
+        /// <summary>
+        /// Quantity already brought back by the customer, all returns together.
+        /// </summary>
+        public int ReturnedQuantity { get; set; }
+
+        /// <summary>
+        /// Quantity that can still be returned (RG-06).
+        /// </summary>
+        public int ReturnableQuantity => Quantity - ReturnedQuantity;
     }
 }

@@ -9,12 +9,14 @@ namespace Stokbox.App.ViewModels
         private const string ProductsKey = "products";
         private const string StockEntriesKey = "stock-entries";
         private const string LabelsKey = "labels";
+        private const string HistoryKey = "history";
         private const string SettingsKey = "settings";
 
         private readonly SaleViewModel _sale;
         private readonly ProductsViewModel _products;
         private readonly StockEntriesViewModel _stockEntries;
         private readonly LabelsViewModel _labels;
+        private readonly HistoryViewModel _history;
         private readonly SettingsViewModel _settings;
         private NavigationItem _selectedMenuItem;
         private object _currentPage;
@@ -24,12 +26,14 @@ namespace Stokbox.App.ViewModels
             ProductsViewModel products,
             StockEntriesViewModel stockEntries,
             LabelsViewModel labels,
+            HistoryViewModel history,
             SettingsViewModel settings)
         {
             _sale = sale;
             _products = products;
             _stockEntries = stockEntries;
             _labels = labels;
+            _history = history;
             _settings = settings;
             MenuItems = new[]
             {
@@ -37,7 +41,7 @@ namespace Stokbox.App.ViewModels
                 new NavigationItem(ProductsKey, "Produits"),
                 new NavigationItem(StockEntriesKey, "Entrées de stock"),
                 new NavigationItem(LabelsKey, "Étiquettes"),
-                new NavigationItem("history", "Historique"),
+                new NavigationItem(HistoryKey, "Historique"),
                 new NavigationItem(SettingsKey, "Paramètres")
             };
 
@@ -89,6 +93,11 @@ namespace Stokbox.App.ViewModels
             {
                 _labels.Refresh();
                 CurrentPage = _labels;
+            }
+            else if (item != null && item.Key == HistoryKey)
+            {
+                _history.Refresh();
+                CurrentPage = _history;
             }
             else if (item != null && item.Key == SettingsKey)
             {

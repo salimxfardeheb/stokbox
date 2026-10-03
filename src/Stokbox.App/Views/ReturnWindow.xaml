@@ -1,0 +1,114 @@
+<Window x:Class="Stokbox.App.Views.ReturnWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:converters="clr-namespace:Stokbox.App.Converters"
+        Title="{Binding Title}"
+        Width="760" Height="460"
+        MinWidth="640" MinHeight="340"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner"
+        FontFamily="Segoe UI" FontSize="14"
+        UseLayoutRounding="True">
+    <Window.Resources>
+        <converters:MoneyConverter x:Key="MoneyConverter" />
+
+        <Style x:Key="RightAlignedCellStyle" TargetType="TextBlock">
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Padding" Value="6,0" />
+        </Style>
+        <Style x:Key="RightAlignedHeaderStyle" TargetType="DataGridColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Right" />
+        </Style>
+
+        <Style x:Key="QuantityBoxStyle" TargetType="TextBox">
+            <Setter Property="TextAlignment" Value="Right" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Padding" Value="2,0" />
+            <Setter Property="Margin" Value="6,3" />
+            <Setter Property="MaxLength" Value="6" />
+            <EventSetter Event="GotKeyboardFocus" Handler="OnQuantityBoxGotKeyboardFocus" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding HasError}" Value="True">
+                    <Setter Property="BorderBrush" Value="#C0392B" />
+                    <Setter Property="Background" Value="#FDECEA" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <DockPanel Margin="20">
+        <TextBlock DockPanel.Dock="Top" Foreground="#52606D" TextWrapping="Wrap" Margin="0,0,0,10"
+                   Text="Saisissez la quantité rapportée par le client pour chaque article. Le remboursement se fait au prix payé lors de la vente." />
+
+        <StackPanel DockPanel.Dock="Bottom" Margin="0,14,0,0">
+            <DockPanel>
+                <Button DockPanel.Dock="Left" Content="Tout retourner" Command="{Binding ReturnAllCommand}"
+                        Style="{StaticResource ActionButtonStyle}" VerticalAlignment="Center" />
+                <StackPanel HorizontalAlignment="Right">
+                    <TextBlock Text="Montant à rembourser" Foreground="#52606D" HorizontalAlignment="Right" />
+                    <TextBlock Text="{Binding RefundText}" FontSize="28" FontWeight="Bold" HorizontalAlignment="Right" />
+                </StackPanel>
+            </DockPanel>
+            <TextBlock Text="{Binding Error}" Style="{StaticResource FieldErrorStyle}" FontSize="13" />
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+                <Button Content="Valider le retour" Command="{Binding ConfirmCommand}" IsDefault="True"
+                        Style="{StaticResource ActionButtonStyle}" FontWeight="SemiBold" Margin="0,0,8,0" />
+                <Button Content="Annuler" IsCancel="True" Style="{StaticResource ActionButtonStyle}" />
+            </StackPanel>
+        </StackPanel>
+
+        <DataGrid ItemsSource="{Binding Rows}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  CanUserResizeRows="False"
+                  CanUserSortColumns="False"
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="Horizontal"
+                  HorizontalGridLinesBrush="#E4E7EB"
+                  Background="White"
+                  BorderBrush="#CBD2D9"
+                  KeyboardNavigation.TabNavigation="Continue"
+                  RowHeight="34">
+            <DataGrid.CellStyle>
+                <!-- Tab passe d'un champ quantité au suivant, sans s'arrêter sur les cellules. -->
+                <Style TargetType="DataGridCell">
+                    <Setter Property="IsTabStop" Value="False" />
+                </Style>
+            </DataGrid.CellStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Désignation" Binding="{Binding Name}" Width="*" MinWidth="140" />
+                <DataGridTextColumn Header="Prix payé"
+                                    Binding="{Binding UnitPriceCents, Converter={StaticResource MoneyConverter}}"
+                                    ElementStyle="{StaticResource RightAlignedCellStyle}"
+                                    HeaderStyle="{StaticResource RightAlignedHeaderStyle}"
+                                    Width="110" />
+                <DataGridTextColumn Header="Vendu" Binding="{Binding SoldQuantity}"
+                                    ElementStyle="{StaticResource RightAlignedCellStyle}"
+                                    HeaderStyle="{StaticResource RightAlignedHeaderStyle}"
+                                    Width="65" />
+                <DataGridTextColumn Header="Déjà retourné" Binding="{Binding ReturnedQuantity}"
+                                    ElementStyle="{StaticResource RightAlignedCellStyle}"
+                                    HeaderStyle="{StaticResource RightAlignedHeaderStyle}"
+                                    Width="105" />
+                <DataGridTextColumn Header="Retournable" Binding="{Binding ReturnableQuantity}"
+                                    ElementStyle="{StaticResource RightAlignedCellStyle}"
+                                    HeaderStyle="{StaticResource RightAlignedHeaderStyle}"
+                                    FontWeight="SemiBold"
+                                    Width="95" />
+                <DataGridTemplateColumn Header="À retourner" Width="100" HeaderStyle="{StaticResource RightAlignedHeaderStyle}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding QuantityText, UpdateSourceTrigger=PropertyChanged}"
+                                     Style="{StaticResource QuantityBoxStyle}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>

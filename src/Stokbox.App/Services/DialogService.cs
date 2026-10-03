@@ -37,6 +37,12 @@ namespace Stokbox.App.Services
             return window.ShowDialog() == true;
         }
 
+        public bool ShowReturn(ReturnViewModel viewModel)
+        {
+            var window = new ReturnWindow(viewModel) { Owner = Application.Current.MainWindow };
+            return window.ShowDialog() == true;
+        }
+
         public bool Ask(string headline, string question)
         {
             var window = new AskWindow(headline, question) { Owner = Application.Current.MainWindow };

@@ -56,6 +56,20 @@ namespace Stokbox.App.Tests
                 Assert.Contains(Descendants<TextBlock>(ask), text => text.Text == "Imprimer le ticket ?");
                 ask.Close();
 
+                var history = new HistoryViewModel(saleService, new StubReceipts(), new StubDialogs());
+                history.Refresh();
+                history.SelectedSale = history.Sales[0];
+                var historyView = new HistoryView { DataContext = history };
+                Layout(historyView, 1100, 600);
+                Assert.Equal(2, Descendants<DatePicker>(historyView).Count());
+                Assert.Contains(Descendants<TextBlock>(historyView), text => text.Text == "Annulée");
+                Assert.Contains(Descendants<TextBlock>(historyView), text => text.Text == "Retours : 520,50 DA remboursés");
+
+                var returnWindow = new ReturnWindow(new ReturnViewModel(saleService, saleService.GetSale(1)));
+                Layout((FrameworkElement)returnWindow.Content, 760, 420);
+                Assert.Equal(2, Descendants<TextBox>(returnWindow).Count());
+                returnWindow.Close();
+
                 var settings = new SettingsView
                 {
                     DataContext = new SettingsViewModel(
@@ -121,6 +135,45 @@ namespace Stokbox.App.Tests
         private sealed class StubSales : ISaleRepository
         {
             public Sale Create(NewSale sale) => new Sale { Number = "V-20261003-0001", Lines = sale.Lines };
+
+            public IReadOnlyList<SaleSummary> Search(System.DateTime fromUtc, System.DateTime toUtc, string numberText) => new[]
+            {
+                new SaleSummary { Id = 1, Number = "V-20261003-0001", CreatedAtUtc = System.DateTime.UtcNow, ArticleCount = 3, TotalCents = 107600, Status = Sale.StatusValidated },
+                new SaleSummary { Id = 2, Number = "V-20261003-0002", CreatedAtUtc = System.DateTime.UtcNow, ArticleCount = 1, TotalCents = 3500, Status = Sale.StatusCancelled }
+            };
+
+            public Sale GetById(long saleId) => new Sale
+            {
+                Id = saleId,
+                Number = "V-20261003-0001",
+                CreatedAtUtc = System.DateTime.UtcNow,
+                TotalCents = 107600,
+                ReceivedCents = 110000,
+                ChangeCents = 2400,
+                Status = Sale.StatusValidated,
+                Lines = new[]
+                {
+                    new SaleLine { Id = 1, ProductName = "Café moulu", Quantity = 2, UnitPriceCents = 52050, LineTotalCents = 104100, ReturnedQuantity = 1 },
+                    new SaleLine { Id = 2, ProductName = "Eau minérale", Quantity = 1, UnitPriceCents = 3500, LineTotalCents = 3500 }
+                }
+            };
+
+            public IReadOnlyList<SaleReturn> GetReturns(long saleId) => new[]
+            {
+                new SaleReturn
+                {
+                    Id = 1,
+                    SaleId = saleId,
+                    CreatedAtUtc = System.DateTime.UtcNow,
+                    Lines = new[] { new SaleReturnLine { SaleLineId = 1, ProductName = "Café moulu", Quantity = 1, UnitPriceCents = 52050 } }
+                }
+            };
+
+            public void Cancel(long saleId, System.DateTime cancelledAtUtc)
+            {
+            }
+
+            public SaleReturn Return(long saleId, IReadOnlyList<ReturnRequestLine> lines, System.DateTime returnedAtUtc) => null;
         }
 
         private sealed class StubCategories : ICategoryRepository
@@ -183,6 +236,8 @@ namespace Stokbox.App.Tests
             public bool ShowPayment(PaymentViewModel viewModel) => false;
 
             public bool Ask(string headline, string question) => false;
+
+            public bool ShowReturn(ReturnViewModel viewModel) => false;
         }
     }
 }

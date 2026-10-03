@@ -58,6 +58,13 @@ namespace Stokbox.App.Printing
                 sale.CreatedAtUtc.ToLocalTime().ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture),
                 NormalSize,
                 FontWeights.Normal));
+
+            // A reprinted receipt of a cancelled sale must not pass for a proof of purchase.
+            if (sale.Status == Sale.StatusCancelled)
+            {
+                receipt.Children.Add(Text("*** VENTE ANNULÉE ***", NormalSize, FontWeights.Bold, TextAlignment.Center));
+            }
+
             receipt.Children.Add(Separator());
 
             foreach (var line in sale.Lines)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Stokbox.Core.Entities;
 using Stokbox.Core.Repositories;
@@ -8,6 +9,7 @@ namespace Stokbox.Core.Services
 {
     /// <summary>
     /// Cash sale: fills a cart under the stock rules, then validates it.
+    /// Afterwards a sale can only be consulted, cancelled or returned: nothing modifies or deletes it (RG-05).
     /// </summary>
     public sealed class SaleService
     {
@@ -158,6 +160,69 @@ namespace Stokbox.Core.Services
 
             cart.Clear();
             return sale;
+        }
+
+        /// <summary>
+        /// Sales of the period, both local days included, the latest first.
+        /// A number, or part of one, searches every period instead: the ticket in hand may be old.
+        /// </summary>
+        public IReadOnlyList<SaleSummary> SearchSales(DateTime fromLocalDate, DateTime toLocalDate, string numberText)
+        {
+            var first = fromLocalDate <= toLocalDate ? fromLocalDate.Date : toLocalDate.Date;
+            var last = fromLocalDate <= toLocalDate ? toLocalDate.Date : fromLocalDate.Date;
+            var number = (numberText ?? string.Empty).Trim();
+
+            return _sales.Search(
+                DateTime.SpecifyKind(first, DateTimeKind.Local).ToUniversalTime(),
+                DateTime.SpecifyKind(last.AddDays(1), DateTimeKind.Local).ToUniversalTime(),
+                number.Length == 0 ? null : number);
+        }
+
+        /// <summary>
+        /// The sale with its lines; null when it does not exist.
+        /// </summary>
+        public Sale GetSale(long saleId)
+        {
+            return _sales.GetById(saleId);
+        }
+
+        public IReadOnlyList<SaleReturn> GetReturns(long saleId)
+        {
+            return _sales.GetReturns(saleId);
+        }
+
+        /// <summary>
+        /// Cancels a validated sale that has no return: its articles go back in stock (RG-05).
+        /// </summary>
+        public void CancelSale(long saleId)
+        {
+            _sales.Cancel(saleId, _utcNow());
+        }
+
+        /// <summary>
+        /// Records articles brought back from a validated sale; each quantity is limited to what was sold
+        /// minus what was already returned (RG-06). The amount to give back is on the result.
+        /// </summary>
+        public SaleReturn ReturnItems(long saleId, IEnumerable<ReturnRequestLine> lines)
+        {
+            var requested = (lines ?? Enumerable.Empty<ReturnRequestLine>()).ToList();
+            if (requested.Count == 0)
+            {
+                throw new ValidationException(QuantityField, "Indiquez au moins un article à retourner.");
+            }
+
+            if (requested.Any(line => line.Quantity < 1))
+            {
+                throw new ValidationException(QuantityField, "La quantité retournée doit être un nombre entier supérieur à 0.");
+            }
+
+            // The same line given twice counts once, for the sum: the limit applies to the whole return.
+            var merged = requested
+                .GroupBy(line => line.SaleLineId)
+                .Select(group => new ReturnRequestLine(group.Key, group.Sum(line => line.Quantity)))
+                .ToList();
+
+            return _sales.Return(saleId, merged, _utcNow());
         }
 
         // RG-03: an archived product is not sold. RG-10: never more than the stock.

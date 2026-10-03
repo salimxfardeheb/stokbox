@@ -12,5 +12,16 @@ namespace Stokbox.Data
         {
             return value.ToUniversalTime().ToString("yyyy-MM-dd'T'HH:mm:ss.fff'Z'", CultureInfo.InvariantCulture);
         }
+
+        /// <summary>
+        /// Reads a stored date back as a UTC DateTime.
+        /// </summary>
+        public static DateTime FromText(string text)
+        {
+            return DateTime.Parse(
+                text,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
+        }
     }
 }

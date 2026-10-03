@@ -60,6 +60,19 @@ namespace Stokbox.App.Tests
         }
 
         [Fact]
+        public void The_receipt_of_a_cancelled_sale_says_so()
+        {
+            Sta.Run(() =>
+            {
+                var sale = SampleSale();
+                Assert.DoesNotContain("*** VENTE ANNULÉE ***", TextsOf(ReceiptDocumentBuilder.CreateReceipt(sale, Shop(), Width72Mm)));
+
+                sale.Status = Sale.StatusCancelled;
+                Assert.Contains("*** VENTE ANNULÉE ***", TextsOf(ReceiptDocumentBuilder.CreateReceipt(sale, Shop(), Width72Mm)));
+            });
+        }
+
+        [Fact]
         public void The_receipt_is_72_mm_wide_and_as_tall_as_its_content()
         {
             Sta.Run(() =>
