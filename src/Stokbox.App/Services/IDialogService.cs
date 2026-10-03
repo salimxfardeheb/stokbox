@@ -15,7 +15,5 @@ namespace Stokbox.App.Services
         bool Confirm(string message);
 
         void ShowWarning(string message);
-
-        void ShowInformation(string message);
     }
 }

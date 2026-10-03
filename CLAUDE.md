@@ -22,6 +22,7 @@ Interdit : .NET Core / .NET 5+, Electron, WebView2, toute dépendance qui ne sup
 - `src/Stokbox.Data` : implémentation SQLite + Dapper, migrations.
 - `src/Stokbox.App` : WPF (vues, ViewModels, impression, injection de dépendances).
 - `tests/Stokbox.Core.Tests`, `tests/Stokbox.Data.Tests` (base SQLite temporaire par test).
+- `tests/Stokbox.App.Tests` : rendu et mise en page des étiquettes (éléments WPF créés sur un thread STA).
 - `installer/` : script Inno Setup.
 
 ## Règles de gestion (obligatoires)

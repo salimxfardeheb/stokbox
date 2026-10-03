@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 using Microsoft.Extensions.DependencyInjection;
+using Stokbox.App.Printing;
 using Stokbox.App.Services;
 using Stokbox.App.ViewModels;
 using Stokbox.App.Views;
@@ -72,14 +73,19 @@ namespace Stokbox.App
             services.AddSingleton<ProductService>();
             services.AddSingleton<IStockMovementRepository, StockMovementRepository>();
             services.AddSingleton<StockService>();
+            services.AddSingleton<ISettingsRepository, SettingsRepository>();
+            services.AddSingleton<LabelSettingsService>();
 
             services.AddSingleton<IDialogService, DialogService>();
-            services.AddSingleton<ILabelPrintService, ComingSoonLabelPrintService>();
+            services.AddSingleton<IPrinterCatalog, WindowsPrinters>();
+            services.AddSingleton<ILabelPrintService, LabelPrintService>();
 
             // One search per screen: each keeps its own text and results.
             services.AddTransient<ProductSearchViewModel>();
             services.AddSingleton<ProductsViewModel>();
             services.AddSingleton<StockEntriesViewModel>();
+            services.AddSingleton<LabelsViewModel>();
+            services.AddSingleton<LabelSettingsViewModel>();
             services.AddSingleton<MainViewModel>();
             services.AddSingleton<MainWindow>();
 

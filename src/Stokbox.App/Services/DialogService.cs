@@ -31,11 +31,6 @@ namespace Stokbox.App.Services
                 MessageBoxResult.No) == MessageBoxResult.Yes;
         }
 
-        public void ShowInformation(string message)
-        {
-            MessageBox.Show(Application.Current.MainWindow, message, Caption, MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
         public void ShowWarning(string message)
         {
             MessageBox.Show(Application.Current.MainWindow, message, Caption, MessageBoxButton.OK, MessageBoxImage.Warning);

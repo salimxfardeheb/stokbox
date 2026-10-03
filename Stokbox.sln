@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stokbox.Core.Tests", "tests
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stokbox.Data.Tests", "tests\Stokbox.Data.Tests\Stokbox.Data.Tests.csproj", "{98F5B03A-8C99-4471-B1E7-5C3D4EFC0E3E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stokbox.App.Tests", "tests\Stokbox.App.Tests\Stokbox.App.Tests.csproj", "{CADABB49-EF85-4C4F-A0FF-BBF726E18219}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,18 @@ Global
 		{98F5B03A-8C99-4471-B1E7-5C3D4EFC0E3E}.Release|x64.Build.0 = Release|Any CPU
 		{98F5B03A-8C99-4471-B1E7-5C3D4EFC0E3E}.Release|x86.ActiveCfg = Release|Any CPU
 		{98F5B03A-8C99-4471-B1E7-5C3D4EFC0E3E}.Release|x86.Build.0 = Release|Any CPU
+		{CADABB49-EF85-4C4F-A0FF-BBF726E18219}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CADABB49-EF85-4C4F-A0FF-BBF726E18219}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CADABB49-EF85-4C4F-A0FF-BBF726E18219}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CADABB49-EF85-4C4F-A0FF-BBF726E18219}.Debug|x64.Build.0 = Debug|Any CPU
+		{CADABB49-EF85-4C4F-A0FF-BBF726E18219}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CADABB49-EF85-4C4F-A0FF-BBF726E18219}.Debug|x86.Build.0 = Debug|Any CPU
+		{CADABB49-EF85-4C4F-A0FF-BBF726E18219}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CADABB49-EF85-4C4F-A0FF-BBF726E18219}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CADABB49-EF85-4C4F-A0FF-BBF726E18219}.Release|x64.ActiveCfg = Release|Any CPU
+		{CADABB49-EF85-4C4F-A0FF-BBF726E18219}.Release|x64.Build.0 = Release|Any CPU
+		{CADABB49-EF85-4C4F-A0FF-BBF726E18219}.Release|x86.ActiveCfg = Release|Any CPU
+		{CADABB49-EF85-4C4F-A0FF-BBF726E18219}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,5 +111,6 @@ Global
 		{4D35DC33-C63C-4486-9FF3-B58655E4D21F} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{EAF2A860-C3AC-4A8F-B913-1C6C2C006A63} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{98F5B03A-8C99-4471-B1E7-5C3D4EFC0E3E} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{CADABB49-EF85-4C4F-A0FF-BBF726E18219} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 	EndGlobalSection
 EndGlobal

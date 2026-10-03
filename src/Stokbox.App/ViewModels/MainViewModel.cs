@@ -7,24 +7,34 @@ namespace Stokbox.App.ViewModels
     {
         private const string ProductsKey = "products";
         private const string StockEntriesKey = "stock-entries";
+        private const string LabelsKey = "labels";
+        private const string SettingsKey = "settings";
 
         private readonly ProductsViewModel _products;
         private readonly StockEntriesViewModel _stockEntries;
+        private readonly LabelsViewModel _labels;
+        private readonly LabelSettingsViewModel _labelSettings;
         private NavigationItem _selectedMenuItem;
         private object _currentPage;
 
-        public MainViewModel(ProductsViewModel products, StockEntriesViewModel stockEntries)
+        public MainViewModel(
+            ProductsViewModel products,
+            StockEntriesViewModel stockEntries,
+            LabelsViewModel labels,
+            LabelSettingsViewModel labelSettings)
         {
             _products = products;
             _stockEntries = stockEntries;
+            _labels = labels;
+            _labelSettings = labelSettings;
             MenuItems = new[]
             {
                 new NavigationItem("sale", "Vente"),
                 new NavigationItem(ProductsKey, "Produits"),
                 new NavigationItem(StockEntriesKey, "Entrées de stock"),
-                new NavigationItem("labels", "Étiquettes"),
+                new NavigationItem(LabelsKey, "Étiquettes"),
                 new NavigationItem("history", "Historique"),
-                new NavigationItem("settings", "Paramètres")
+                new NavigationItem(SettingsKey, "Paramètres")
             };
             _selectedMenuItem = MenuItems[0];
         }
@@ -62,6 +72,16 @@ namespace Stokbox.App.ViewModels
             else if (item != null && item.Key == StockEntriesKey)
             {
                 CurrentPage = _stockEntries;
+            }
+            else if (item != null && item.Key == LabelsKey)
+            {
+                _labels.Refresh();
+                CurrentPage = _labels;
+            }
+            else if (item != null && item.Key == SettingsKey)
+            {
+                _labelSettings.Load();
+                CurrentPage = _labelSettings;
             }
             else
             {

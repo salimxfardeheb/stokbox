@@ -190,7 +190,7 @@ namespace Stokbox.App.ViewModels
                 return;
             }
 
-            _labelPrintService.PrintLabels(_lastEntry.Product, _lastEntry.Quantity);
+            _labelPrintService.Print(new[] { new LabelPrintItem(_lastEntry.Product, _lastEntry.Quantity) });
             if (!HasSelectedProduct)
             {
                 Search.RequestFocus();

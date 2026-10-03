@@ -16,6 +16,13 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="ZXing.Net" Version="0.16.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Impression WPF : files d'impression Windows et écriture du document vers le pilote. -->
+    <Reference Include="ReachFramework" />
+    <Reference Include="System.Printing" />
   </ItemGroup>
 
 </Project>
